@@ -1,11 +1,46 @@
-# MOSAIC — Vision & Foundations: how to put it online and collect responses
+# MOSAIC — Vision & Foundations: live document
 
-This folder contains one file you actually deploy: **`index.html`**. The CGIAR logo
-is embedded inside it, so it is fully self-contained — you can email it, move it, or
-upload it on its own and nothing will break.
+**It is already live here:**
+**https://aow2-mfl-cgiar-science-program.github.io/MOSAIC_vision_foundation/**
 
-There are two steps: **(A) embed the response form** so people can comment, and
-**(B) host the page** on GitHub Pages so it has a web address to share.
+- Repo: https://github.com/AoW2-MFL-CGIAR-Science-Program/MOSAIC_vision_foundation
+- The Microsoft Form (https://forms.cloud.microsoft/e/wcgeFbHJCM) is embedded in
+  Section 13, and the CGIAR logo is embedded in the file, so `index.html` is fully
+  self-contained.
+- Responses collect in that form's **Responses** tab (export to Excel there). The page
+  stores nothing itself.
+
+Share the live link above with leadership and the focal points.
+
+> **Heads-up — the link is public.** Anyone with the URL can view it (no CGIAR login).
+> Fine for a vision/validation document; do not put sensitive data here.
+
+---
+
+## How to update the document later
+
+You (account `lizciat`) have admin on the repo. To publish a change:
+
+**Option 1 — command line (from this folder):**
+
+    git add index.html
+    git commit -m "Update document"
+    git push
+
+The live page refreshes within ~1 minute.
+
+**Option 2 — GitHub website:** open the repo → click `index.html` → pencil icon →
+paste the new content / upload → **Commit changes**.
+
+To change the cover status label, edit `var STATUS_LABEL = "For validation";` near the
+top of the `<script>` in `index.html` (e.g. to `"Final"`).
+
+---
+
+## Reference: how it was set up (already done)
+
+There were two steps: **(A) embed the response form** and **(B) host on GitHub Pages**.
+Both are complete; this section is kept for the record.
 
 ---
 
