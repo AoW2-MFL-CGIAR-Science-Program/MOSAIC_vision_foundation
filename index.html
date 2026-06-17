@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOSAIC — Vision &amp; Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #E7DFD0; }
+  ::selection { background: #C97D1B; color: #fff; }
+
+  /* Nav-rail rows (generated) */
+  .toc-row {
+    display: flex; gap: 12px; align-items: baseline;
+    padding: 7px 14px 7px 19px; cursor: pointer;
+    border-left: 3px solid transparent; background: transparent;
+    transition: background .15s, border-color .15s;
+  }
+  .toc-row:hover { background: rgba(214,238,242,0.06); }
+  .toc-row .toc-num {
+    font-family: Georgia, serif; font-size: 11.5px; width: 20px;
+    flex-shrink: 0; color: rgba(214,238,242,0.42); font-weight: 700;
+  }
+  .toc-row .toc-label {
+    font-family: Carlito, Calibri, sans-serif; font-size: 13.5px;
+    line-height: 1.35; color: rgba(214,238,242,0.72); font-weight: 400;
+  }
+  .toc-row.active { border-left-color: #C97D1B; background: rgba(214,238,242,0.10); }
+  .toc-row.active .toc-num { color: #E8B776; }
+  .toc-row.active .toc-label { color: #FFFFFF; font-weight: 700; }
+
+  #railCta:hover { filter: brightness(1.06); }
+
+  @media print {
+    .mo-rail, .mo-top, .mo-railnote { display: none !important; }
+    .mo-stage { margin-left: 0 !important; padding: 0 !important; background: #fff !important; }
+    .mo-sheet { box-shadow: none !important; border-radius: 0 !important; max-width: none !important; }
+    .mo-cover { border-radius: 0 !important; }
+    @page { margin: 0; }
+  }
+
+  @media (max-width: 860px) {
+    .mo-rail { display: none; }
+    .mo-top { left: 0 !important; }
+    .mo-stage { margin-left: 0 !important; padding: 24px 16px 60px !important; }
+    .mo-sheet section, .mo-cover > div:first-child { padding-left: 24px !important; padding-right: 24px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="mo-stage" style="margin-left:268px;background:#E7DFD0;min-height:100vh;padding:46px 40px 80px;font-family:Carlito,Calibri,'Segoe UI',sans-serif;">
+
+  <div class="mo-top" style="position:fixed;top:0;left:268px;right:0;height:4px;background:rgba(13,92,107,0.10);z-index:40;">
+    <div id="progressFill" style="height:100%;background:linear-gradient(90deg,#0D5C6B,#C97D1B);width:0%;transition:width .12s ease-out;"></div>
+  </div>
+
+  <!-- ===================== NAV RAIL ===================== -->
+  <aside class="mo-rail" style="position:fixed;top:0;left:0;width:268px;height:100vh;background:#0D5C6B;display:flex;flex-direction:column;z-index:30;border-right:1px solid rgba(0,0,0,0.12);">
+    <div style="padding:26px 22px 18px;border-bottom:1px solid rgba(214,238,242,0.14);">
+      <div style="display:flex;flex-direction:column;gap:4px;width:104px;margin-bottom:14px;">
+        <div style="display:flex;gap:4px;height:22px;">
+          <div style="flex:35;background:#D6EEF2;border-radius:2px;"></div>
+          <div style="flex:28;background:#C97D1B;border-radius:2px;"></div>
+          <div style="flex:35;background:#B54D2F;border-radius:2px;"></div>
+        </div>
+        <div style="display:flex;gap:4px;height:22px;">
+          <div style="flex:28;background:#B54D2F;border-radius:2px;"></div>
+          <div style="flex:35;background:#D6EEF2;border-radius:2px;"></div>
+          <div style="flex:35;background:#C97D1B;border-radius:2px;"></div>
+        </div>
+      </div>
+      <div style="font-family:Georgia,serif;font-size:21px;font-weight:700;color:#fff;letter-spacing:0.06em;">MOSAIC</div>
+      <div style="font-family:Carlito,Calibri,sans-serif;font-size:10.5px;color:rgba(214,238,242,0.62);margin-top:3px;line-height:1.3;">Vision &amp; Foundations</div>
+    </div>
+    <nav id="toc" style="flex:1;overflow-y:auto;padding:12px 0;"></nav>
+    <div class="mo-railnote" style="padding:14px 22px 18px;border-top:1px solid rgba(214,238,242,0.14);">
+      <div style="font-family:Carlito,Calibri,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:rgba(214,238,242,0.5);margin-bottom:8px;">Your review</div>
+      <div id="railCta" role="button" tabindex="0" style="font-family:Carlito,Calibri,sans-serif;font-size:13px;font-weight:700;color:#0D5C6B;background:#E8B776;border-radius:7px;padding:10px 13px;cursor:pointer;line-height:1.3;text-align:center;transition:filter .15s;">
+        Share your response &rarr;
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== CONTENT ===================== -->
+  <div style="max-width:880px;margin:0 auto;">
+
+    <!-- COVER -->
+    <section id="cover" class="mo-cover" style="background:#0D5C6B;border-radius:8px 8px 0 0;overflow:hidden;position:relative;color:#fff;">
+      <div style="padding:48px 60px 40px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px;">
+          <div style="display:flex;flex-direction:column;gap:5px;width:128px;">
+            <div style="display:flex;gap:5px;height:30px;">
+              <div style="flex:35;background:#D6EEF2;border-radius:2px;"></div>
+              <div style="flex:28;background:#C97D1B;border-radius:2px;"></div>
+              <div style="flex:35;background:#B54D2F;border-radius:2px;"></div>
+            </div>
+            <div style="display:flex;gap:5px;height:30px;">
+              <div style="flex:28;background:#B54D2F;border-radius:2px;"></div>
+              <div style="flex:35;background:#D6EEF2;border-radius:2px;"></div>
+              <div style="flex:35;background:#C97D1B;border-radius:2px;"></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;background:rgba(214,238,242,0.12);border:1px solid rgba(214,238,242,0.25);border-radius:100px;padding:7px 15px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#C97D1B;"></span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12px;letter-spacing:0.04em;color:#D6EEF2;">Version 1.0 · <span class="statusLabel">For validation</span></span>
+          </div>
+        </div>
+
+        <div style="margin-top:52px;">
+          <div style="font-family:Georgia,serif;font-size:84px;font-weight:700;letter-spacing:0.02em;line-height:0.96;">MOSAIC</div>
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:19px;color:#D6EEF2;margin-top:14px;max-width:560px;line-height:1.4;">Multifunctional Open Spatial Analysis &amp; Integration Collaborative</div>
+        </div>
+
+        <div style="margin-top:34px;padding-top:22px;border-top:1px solid rgba(214,238,242,0.22);display:flex;flex-direction:column;gap:14px;">
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:14px;color:rgba(214,238,242,0.8);line-height:1.5;">
+            The shared spatial intelligence network for the CGIAR MFL Science Programme · Area of Work 2 — Landscape Optimization &amp; Inclusive Planning
+          </div>
+          <div style="font-family:Carlito,Calibri,sans-serif;font-style:italic;font-size:17px;color:#E8B776;line-height:1.45;max-width:600px;">
+            Be part of the shared spatial intelligence network for multifunctional living landscapes.
+          </div>
+        </div>
+
+        <div style="margin-top:38px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:rgba(214,238,242,0.62);line-height:1.5;">
+            June 2026 · For validation by programme leadership<br>and Community of Practice focal points
+          </div>
+          <div style="background:#F7F4EF;border-radius:6px;padding:11px 16px;display:flex;flex-direction:column;gap:7px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#6B7A85;">An initiative of</div>
+            <img src="data:image/webp;base64,UklGRmZbAABXRUJQVlA4WAoAAAAYAAAA/wcArgIAQUxQSE8CAAAJcBvbtqpcPKMkSvOC3F1DMnpxyX+IrYiYgFe8UT/TUW4ULpHU9LPYLd1y8e34EPzP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP/5//6YhssjK5yH0/KnTfqTuD6TEeyXnFabVvdr8dD1cAVlA4IC5YAACwnwKdASoACK8CPnU6nEkko6khI3MoySAOiWdu/APP+WCGvzy+wBfxyLbflf+ruzZL9rf5f8Z0Jd/fvz+Z3/B4LSiO9n377Pv+D+//vo/sn5/+81//PXV6VfNT5tO7feuV/N+mg6IDVbPlH9S/yv9z/bL4U+BX6T+4/kB7l9Zr2n+Oi+f2zalnyL72f2v7z7df6zvf9bH989gX8p/pn+W+4j6D3u2o//B9QX3m+mf8z++/5X2XPqvMn+J/zf7EfAB/fOG1+/+oL/Tv9R6Jf136PPrr2GP55/gP/F67///92v7rf/////ET+4YUvMiyHhEAs78+4L3Be4L3Be4L3BUZHC/KbxlR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" alt="CGIAR Multifunctional Landscapes" style="width:228px;height:auto;display:block;">
+          </div>
+        </div>
+      </div>
+      <div style="height:8px;background:#C97D1B;"></div>
+    </section>
+
+    <!-- SHEET -->
+    <div class="mo-sheet" style="background:#fff;border-radius:0 0 8px 8px;box-shadow:0 10px 40px rgba(28,43,58,0.13);overflow:hidden;">
+
+      <!-- ABOUT -->
+      <section id="sec-about" style="padding:46px 64px 40px;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:13px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">About this document</div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:17px;line-height:1.72;color:#1C2B3A;margin:0 0 16px;">This is a <strong>foundational document</strong>. Its purpose is to put in writing the shared vision for MOSAIC — what it is, why it exists, the value it adds, who it serves, and the principles that will guide how we build it — so the people leading this work can confirm we are all building toward the same picture before we commit to design and delivery.</p>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 16px;">It is written at the level of vision and principles rather than technical specification. The detailed technical design already exists in a companion document, the <em>MFL Living Landscapes Geospatial Data Hub Proposal</em>. This document sits above that one: it is the reference we return to whenever we need to remember what MOSAIC is for and what makes it worth building.</p>
+        <div style="background:#F7F4EF;border-left:5px solid #C97D1B;border-radius:0 6px 6px 0;padding:18px 22px;margin-top:8px;">
+          <p style="font-family:Carlito,Calibri,sans-serif;font-size:15.5px;line-height:1.6;color:#1C2B3A;margin:0;">We ask readers to review it through one lens: <strong>does this reflect the same vision you hold?</strong> The five validation questions at the end of this document make that ask concrete — and you can record your responses inline as you read.</p>
+        </div>
+      </section>
+
+      <!-- SECTION 1 -->
+      <section id="sec-1" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 01</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">What MOSAIC is</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 16px;">MOSAIC is the shared spatial intelligence network for the CGIAR MFL Science Programme. The name reflects the work: a mosaic is many distinct pieces forming one coherent picture — exactly what this initiative does, bringing together geospatial data and capacity from across <strong>ten CGIAR centres</strong> into a unified view of our Living Landscapes.</p>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 16px;">Across the programme there is already a great deal of geospatial work underway. What is missing is the connective tissue: a common way to know what exists, to reach trusted external data without each team rebuilding the same pipelines, and to combine global and local layers into something coherent at the landscape scale. MOSAIC is that connective tissue — best understood as three things working together.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0 18px;">
+          <div style="background:#F7F4EF;border-top:4px solid #0D5C6B;border-radius:6px;padding:18px 18px 20px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#0D5C6B;margin-bottom:8px;">A catalogue</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#1C2B3A;margin:0;">that makes the programme's geospatial assets discoverable, well-described and quality-tracked.</p>
+          </div>
+          <div style="background:#F7F4EF;border-top:4px solid #C97D1B;border-radius:6px;padding:18px 18px 20px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#C97D1B;margin-bottom:8px;">Connectors &amp; frameworks</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#1C2B3A;margin:0;">that give researchers reliable, documented access to the major external data services the world already operates.</p>
+          </div>
+          <div style="background:#F7F4EF;border-top:4px solid #B54D2F;border-radius:6px;padding:18px 18px 20px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#B54D2F;margin-bottom:8px;">A coordination function</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#1C2B3A;margin:0;">that gives coherence to what the different centres and partners are already doing, so effort is shared rather than duplicated.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 4px;">A note on language: MOSAIC is deliberately framed as a coordination network and metadata system, not as a monolithic store that holds a copy of everything. We may casually call it a data hub, but the heart of it is connection and coherence, not accumulation — and that is what keeps it lightweight, low-cost, and realistic to sustain.</p>
+        <div style="border-left:5px solid #B54D2F;border-radius:0 6px 6px 0;padding:18px 22px;margin-top:22px;background-color:#fbeee9;">
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#B54D2F;margin-bottom:8px;">What MOSAIC is not</div>
+          <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">It is <strong>not</strong> an attempt to re-host the world's geospatial data — we connect to Google Earth Engine, CHIRPS, and other services; we do not duplicate them. It is <strong>not</strong> a single centre's product imposed on the others.&nbsp;</p>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section id="sec-2" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 02</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">Why MOSAIC, and why now</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 18px;">The programme needs spatially explicit evidence to characterize ecosystem condition, find where landscapes are under stress, and prioritize where action matters most. That evidence is only useful if it can be found, trusted, and combined across themes and landscapes. Today it cannot — for four connected reasons.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">No common catalogue</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#6B7A85;margin:0;">No one can say with confidence what spatial data exists across the ten centres, so the same global datasets are re-acquired while unique local data stays invisible.</p>
+          </div>
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">No agreed landscape boundaries</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#6B7A85;margin:0;">Without an agreed extent for each Living Landscape, data cannot be organized, compared, or integrated by landscape.</p>
+          </div>
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">No shared minimum standards</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#6B7A85;margin:0;">Data may arrive without a coordinate reference system, temporal coverage, or a license, so users cannot judge whether it is fit for purpose.</p>
+          </div>
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">No path from "exists" to "ready to use"</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.55;color:#6B7A85;margin:0;">Listing a dataset in a spreadsheet is not the same as making it usable. The programme needs a visible route to validated, analysis-ready layers.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section id="sec-3" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 03</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 20px;letter-spacing:-0.01em;">Vision and mission</h2>
+        <div style="background:#0D5C6B;border-radius:8px;padding:30px 34px;color:#fff;">
+          <div style="margin-bottom:22px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#E8B776;margin-bottom:9px;">Vision</div>
+            <p style="font-family:Georgia,serif;font-size:19px;line-height:1.5;color:#fff;margin:0;">Every team working on a Living Landscape can find, trust, and combine the spatial evidence they need — drawing on the best global data the world maintains and the local data only CGIAR holds — to understand landscape condition and prioritize action.</p>
+          </div>
+          <div style="border-top:1px solid rgba(214,238,242,0.22);padding-top:22px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:#E8B776;margin-bottom:9px;">Mission</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:15.5px;line-height:1.62;color:#D6EEF2;margin:0;">To coordinate and give coherence to the geospatial work already happening across CGIAR centres and institutions— providing a shared catalogue, common standards, and reliable connections to external and local data — so the programme can move from fragmented effort to a unified landscape view.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-style:italic;font-size:18px;line-height:1.5;color:#C97D1B;text-align:center;margin:24px auto 4px;max-width:620px;">"Be part of the shared spatial intelligence network for multifunctional living landscapes."</p>
+      </section>
+
+      <!-- SECTION 4 -->
+      <section id="sec-4" style="padding:46px 64px;border-top:1px solid #EFE9DD;background:#FBF8F2;break-inside:avoid;">
+        <div style="display:inline-block;font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#fff;background:#B54D2F;border-radius:100px;padding:5px 13px;margin-bottom:12px;">The idea at the centre of MOSAIC</div>
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 04</div>
+        <h2 style="font-family:Georgia,serif;font-size:30px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">Our distinctive value: connect, don't duplicate</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 18px;">The world already has organizations that build and operate enormous geospatial data services far better than any single programme could — Google Earth Engine, CHIRPS, ESA WorldCover, SRTM, JRC Global Surface Water. They are world-class, well-funded, continuously updated, and freely accessible. It would make no sense for MOSAIC to copy them.</p>
+        <p style="font-family:Georgia,serif;font-size:21px;line-height:1.5;color:#0D5C6B;font-weight:700;margin:0 0 24px;padding-left:20px;border-left:5px solid #C97D1B;">MOSAIC's value is not in holding this data. It is in making it usable for our specific landscapes, and in combining it with the local data that we have.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border-radius:8px;padding:20px 24px;box-shadow:0 2px 10px rgba(28,43,58,0.05);">
+            <div style="font-family:Georgia,serif;font-size:30px;font-weight:700;color:#0D5C6B;line-height:1;flex-shrink:0;width:40px;">1</div>
+            <div>
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Frameworks and connections to reach external data</div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">Rather than every researcher learning how to pull, clip and reproject a CHIRPS time series or an Earth Engine layer for the Lake Victoria Basin, MOSAIC provides documented, reusable connections. The hard, repetitive plumbing is solved once and shared, with provenance and parameters recorded so results are reproducible.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border-radius:8px;padding:20px 24px;box-shadow:0 2px 10px rgba(28,43,58,0.05);">
+            <div style="font-family:Georgia,serif;font-size:30px;font-weight:700;color:#C97D1B;line-height:1;flex-shrink:0;width:40px;">2</div>
+            <div>
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">The local data the global services don't have</div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">Field-level soil samples, locally validated degradation maps, agrobiodiversity records, and socio-economic survey layers — built by CGIAR centres&nbsp;and partners over the years. This is precisely what turns a generic global map into a decision-relevant landscape assessment. MOSAIC catalogues it, applies minimum quality standards, and makes it discoverable alongside the global layers.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:18px;align-items:flex-start;background:#fff;border-radius:8px;padding:20px 24px;box-shadow:0 2px 10px rgba(28,43,58,0.05);">
+            <div style="font-family:Georgia,serif;font-size:30px;font-weight:700;color:#B54D2F;line-height:1;flex-shrink:0;width:40px;">3</div>
+            <div>
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Combining the two into a coherent landscape view</div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">A global land-cover product becomes far more powerful overlaid with local degradation data, water stress, and socio-economic vulnerability for the same area, within an agreed boundary. That combination — global reach plus local depth, organized by landscape — is what MOSAIC uniquely enables, and what the Digital Twin and participatory planning work need.</p>
+            </div>
+          </div>
+        </div>
+        <div style="border-left:5px solid #B54D2F;border-radius:0 6px 6px 0;padding:18px 22px;margin-top:22px;background-color:#fbeee9;">
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#B54D2F;margin-bottom:8px;">IN SHORT:</div>
+          <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;"><span style="font-size:15px;">The global providers give us breadth, our centres give us depth, and <b>MOSAIC</b> is the layer that connects them and keeps them coherent.</span></p>
+        </div>
+      </section>
+
+      <!-- SECTION 5 -->
+      <section id="sec-5" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 05</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 8px;letter-spacing:-0.01em;">Guiding principles</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 20px;">These describe how we make decisions as MOSAIC is built. When a trade-off appears, we resolve it in favour of these.</p>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Connect before collecting</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">Where data is already well maintained elsewhere, we link to it rather than re-host it. We hold and curate data only where we add genuine value — primarily local datasets and analysis-ready landscape layers.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Start simple, grow with evidence</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">We begin with the lightest tools that work and add complexity only when real use demands it. A focused, working catalogue beats an ambitious platform that never launches.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Coordinate, don't command</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">MOSAIC gives coherence to existing work; it does not gatekeep or override centres. Centres are contributors and partners, and their existing work is acknowledged, not absorbed.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Open by default</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">Programme outputs and global public datasets are openly accessible. Access is restricted only where licensing, sensitivity, or ownership genuinely require it — and even then, the data stays discoverable through its metadata.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Quality is visible, not assumed</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">Every dataset carries clear metadata and a stated readiness level, so users always know what they are getting and whether it is fit for their purpose.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;border-bottom:1px solid #F0EADD;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">FAIR and interoperable</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">We follow recognized standards (such as STAC for spatial metadata) so MOSAIC can feed and be fed by wider CGIAR platforms rather than becoming an island.</div>
+          </div>
+          <div style="display:flex;gap:18px;padding:15px 0;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:210px;flex-shrink:0;">Built to be sustained</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;">We favour low-cost, low-maintenance, well-documented solutions a small team can realistically keep running — because a system no one can maintain helps no one.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6 -->
+      <section id="sec-6" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 06</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 8px;letter-spacing:-0.01em;">What MOSAIC delivers in 2026</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 20px;">The vision is multi-year, but this year's commitments are deliberately focused. For the priority living landscapes &nbsp;the 2026 deliverables are:</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px;">
+          <div style="background:#F7F4EF;border-left:5px solid #0D5C6B;border-radius:0 6px 6px 0;padding:18px 22px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#0D5C6B;margin-bottom:7px;">Landscape delineation maps</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;margin:0;">Clear, agreed spatial boundaries for each priority Living Landscape. No centre has produced these yet — they are the foundation everything else organizes around, and the first concrete action.</p>
+          </div>
+          <div style="background:#F7F4EF;border-left:5px solid #C97D1B;border-radius:0 6px 6px 0;padding:18px 22px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#C97D1B;margin-bottom:7px;">A gap analysis</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;margin:0;">Per country, an inventory of what geospatial datasets exist across centres, what can be filled in 2026, and what waits until 2027 — organized by the 13 MFL themes so gaps are visible per theme and per landscape.</p>
+          </div>
+          <div style="background:#F7F4EF;border-left:5px solid #B54D2F;border-radius:0 6px 6px 0;padding:18px 22px;">
+            <div style="font-family:Georgia,serif;font-size:16px;font-weight:700;color:#B54D2F;margin-bottom:7px;">A minimum spatial package</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;margin:0;">A defined, agreed set of layers for a baseline assessment of each landscape — land cover and use, ecosystem condition, land health, water, biodiversity, socio-economic — so every landscape is described comparably.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#1C2B3A;margin:0 0 22px;">Together these feed directly into the <strong>Digital Twin</strong> and <strong>Vision-to-Action</strong> participatory planning workstreams of AoW2. Explicitly out of scope for 2026 is a fully harmonized, centralized data repository — a longer-term goal we are deliberately not promising this year.</p>
+        <div style="background:#fff;border:1px solid #E7E0D2;border-radius:8px;padding:20px 22px;">
+          <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0D5C6B;margin-bottom:13px;">The 13 MFL themes — how all data and gaps are organized</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Boundaries &amp; admin units</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Land cover &amp; land use</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Ecosystem condition</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Degradation &amp; land health</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Water &amp; hydrology</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Biodiversity &amp; ecosystems</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Pressures &amp; drivers</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Ecosystem services</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Hotspots &amp; leverage points</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Scenarios &amp; future risks</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Decision-support outputs</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Agrobiodiversity &amp; crops</span>
+            <span style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;color:#1C2B3A;background:#F7F4EF;border:1px solid #E7E0D2;border-radius:100px;padding:6px 13px;">Socio-economic &amp; livelihoods</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 7 -->
+      <section id="sec-7" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 07</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">Who MOSAIC serves</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 20px;">MOSAIC's users grow in deliberate phases. We build for today's users first and earn the right to serve a wider audience by getting the foundations right.</p>
+        <div style="display:flex;gap:16px;align-items:stretch;flex-wrap:wrap;">
+          <div style="flex:1;min-width:240px;background:#0D5C6B;border-radius:8px;padding:22px 24px;color:#fff;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#E8B776;margin-bottom:8px;">Phase 1 · Now</div>
+            <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;margin-bottom:9px;">The CGIAR research community</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.6;color:#D6EEF2;margin:0;">Researchers, geospatial focal points and analysts inside CGIAR centres working on the Living Landscapes. They are the contributors and first beneficiaries — registering and discovering datasets, reaching external data through shared connectors, and drawing on the minimum spatial package. Serving this group well is the priority: they populate and validate MOSAIC and feed the Digital Twin and planning work.</p>
+          </div>
+          <div style="display:flex;align-items:center;font-family:Georgia,serif;font-size:26px;color:#C97D1B;font-weight:700;">→</div>
+          <div style="flex:1;min-width:240px;background:#F7F4EF;border:1px dashed #C5BBA6;border-radius:8px;padding:22px 24px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#C97D1B;margin-bottom:8px;">Phase 2 · Forward-looking</div>
+            <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#1C2B3A;margin-bottom:9px;">Partners and local governments</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.6;color:#1C2B3A;margin:0;">As the foundations mature, the intent is to open relevant, appropriately licensed parts of MOSAIC to external partners and to local and national governments in our landscapes. For them, value lies in transparent, well-documented landscape evidence for planning, with clear attribution to contributing centres. This wider opening is sequenced after the internal foundations are solid — not a Phase 1 promise.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#1C2B3A;margin:18px 0 0;">Designing for the CGIAR community first, with the partner and government audience explicitly in mind, shapes choices we make now: open-by-default access, recognized standards, clear attribution, and visible quality. These are what make later opening credible rather than a scramble.</p>
+      </section>
+
+      <!-- SECTION 8 -->
+      <section id="sec-8" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 08</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">How MOSAIC works, in plain terms</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 18px;">MOSAIC separates three concerns so we never have to wait for full infrastructure before delivering value:</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;color:#C97D1B;margin-bottom:6px;">01</div>
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Knowing what exists</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#6B7A85;margin:0;">A catalogue recording each dataset's description, location, owner, coverage, license and quality status.</p>
+          </div>
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;color:#C97D1B;margin-bottom:6px;">02</div>
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Reaching the data</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#6B7A85;margin:0;">Connectors to external services for global layers, and curated storage for local datasets and analysis-ready products we hold ourselves.</p>
+          </div>
+          <div style="border:1px solid #E7E0D2;border-radius:6px;padding:16px 18px;">
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;font-weight:700;color:#C97D1B;margin-bottom:6px;">03</div>
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Serving it</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#6B7A85;margin:0;">Making data discoverable and accessible to users and, in time, to applications like the Digital Twin through standard protocols.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15.5px;line-height:1.68;color:#1C2B3A;margin:0 0 14px;">Crucially, every dataset carries a visible <strong>readiness level</strong> so users always know what they are looking at — preventing the common confusion between "a dataset is listed" and "a dataset is ready to use":</p>
+        <div style="display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin-bottom:20px;">
+          <div style="flex:1;min-width:110px;background:#EEF6F8;border-radius:6px 0 0 6px;padding:14px 12px;text-align:center;border-right:3px solid #fff;">
+            <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#0D5C6B;">Registered</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;color:#6B7A85;margin-top:3px;line-height:1.4;">Known &amp; described</div>
+          </div>
+          <div style="flex:1;min-width:110px;background:#DCEDF1;padding:14px 12px;text-align:center;border-right:3px solid #fff;">
+            <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#0D5C6B;">Under review</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;color:#6B7A85;margin-top:3px;line-height:1.4;">Being checked</div>
+          </div>
+          <div style="flex:1;min-width:110px;background:#C9E3EA;padding:14px 12px;text-align:center;border-right:3px solid #fff;">
+            <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#0D5C6B;">Accepted</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;color:#6B7A85;margin-top:3px;line-height:1.4;">Meets standards</div>
+          </div>
+          <div style="flex:1;min-width:110px;background:#9AC9D4;padding:14px 12px;text-align:center;border-right:3px solid #fff;">
+            <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#0D5C6B;">Validated</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;color:#3C5560;margin-top:3px;line-height:1.4;">Thematically confirmed</div>
+          </div>
+          <div style="flex:1.1;min-width:120px;background:#0D5C6B;border-radius:0 6px 6px 0;padding:14px 12px;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#fff;">Analysis-ready</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:11px;color:#E8B776;margin-top:3px;line-height:1.4;">Harmonized &amp; clipped</div>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#1C2B3A;margin:0;">The approach is phased on purpose. We start with the simplest tools that work — a structured catalogue, shared vocabularies, documentation, and a small set of quality checks — and add capability only as real use justifies it. This keeps cost low (effectively zero infrastructure cost to begin) and within what a small coordinating team can sustain.</p>
+      </section>
+
+      <!-- SECTION 9 -->
+      <section id="sec-9" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 09</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">How MOSAIC fits with other platforms</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 20px;">MOSAIC is designed to complement, not compete with, the other data efforts in and around the programme. Being explicit about these boundaries avoids duplication and turf confusion.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:16px;align-items:baseline;background:#F7F4EF;border-radius:6px;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:190px;flex-shrink:0;">Climate Data Hub</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;">Covers climate layers; MOSAIC covers the non-climate spatial themes and links to it for climate data through metadata, rather than re-storing it.</div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:baseline;background:#F7F4EF;border-radius:6px;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:190px;flex-shrink:0;">GARDIAN / Fairgrounds &amp; CGSpace / Dataverse</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;">CGIAR-wide platforms for discovery and deposit; MOSAIC is a domain-specific feeder whose metadata is designed to be harvestable by them, with finished datasets deposited there and cross-linked.</div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:baseline;background:#F7F4EF;border-radius:6px;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;width:190px;flex-shrink:0;">Digital Twin &amp; Vision-to-Action</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;line-height:1.58;color:#1C2B3A;">MOSAIC's primary internal customers: it supplies the validated, organized landscape layers they consume.</div>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#6B7A85;margin:18px 0 0;font-style:italic;">The throughline is consistent with our principles: MOSAIC connects to and supports the broader ecosystem rather than trying to replace any part of it.</p>
+      </section>
+
+      <!-- SECTION 10 -->
+      <section id="sec-10" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 10</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">Governance and roles</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 20px;">MOSAIC works because responsibilities are clear and lightweight.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+          <div style="border-left:5px solid #0D5C6B;background:#F7F4EF;border-radius:0 6px 6px 0;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;margin-bottom:5px;">Technical Coordinator / Data Steward</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:12px;color:#C97D1B;font-weight:700;margin-bottom:6px;">Lizeth Llanos · Hannes&nbsp; Gaisberger</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#1C2B3A;margin:0;">Maintains standards, coordinates contributions, runs quality checks, and keeps the catalogue coherent.</p>
+          </div>
+          <div style="border-left:5px solid #C97D1B;background:#F7F4EF;border-radius:0 6px 6px 0;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;margin-bottom:5px;">Geospatial focal points</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:12px;color:#C97D1B;font-weight:700;margin-bottom:6px;">10 nominated across the CoP</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#1C2B3A;margin:0;">Register their centre's datasets, respond to gap requests, and validate the accuracy of local data.</p>
+          </div>
+          <div style="border-left:5px solid #B54D2F;background:#F7F4EF;border-radius:0 6px 6px 0;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;margin-bottom:5px;">Scientific reviewers</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:12px;color:#C97D1B;font-weight:700;margin-bottom:6px;">From AoW2</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#1C2B3A;margin:0;">Confirm thematic fitness for purpose when datasets reach validation.</p>
+          </div>
+          <div style="border-left:5px solid #0D5C6B;background:#F7F4EF;border-radius:0 6px 6px 0;padding:16px 20px;">
+            <div style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:#0D5C6B;margin-bottom:5px;">Programme leadership</div>
+            <div style="font-family:Carlito,Calibri,sans-serif;font-size:12px;color:#C97D1B;font-weight:700;margin-bottom:6px;">Christopher Kettle · Lulseged Desta</div>
+            <p style="font-family:Carlito,Calibri,sans-serif;font-size:13px;line-height:1.55;color:#1C2B3A;margin:0;">Sets direction, approves governance changes, and ensures alignment with MFL Science Program deliverables.</p>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#1C2B3A;margin:0;">The coordinating role is explicitly one of giving coherence, not of producing every output single-handedly. MOSAIC succeeds when the whole AoW2 community contributes within a common framework — that is the design, and the mitigation against over-reliance on any one person.</p>
+      </section>
+
+      <!-- SECTION 11 -->
+      <section id="sec-11" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 11</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">A high-level path forward</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 22px;">The detailed roadmap lives in the companion proposal; at the level of vision, the path has three movements — each independently valuable.</p>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div style="display:flex;gap:20px;padding-bottom:22px;position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#0D5C6B;color:#fff;font-family:Georgia,serif;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;">1</div>
+              <div style="width:2px;flex:1;background:#DCD3C0;margin-top:4px;"></div>
+            </div>
+            <div style="padding-top:4px;">
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Establish the foundations <span style="font-family:Carlito,Calibri,sans-serif;font-size:12px;font-weight:700;color:#C97D1B;background:#FBF1E2;border-radius:100px;padding:3px 10px;margin-left:6px;">this year</span></div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;margin:0;">Agree the landscape boundaries for the Living Landscapes; stand up the shared catalogue and vocabularies; pre-populate known global datasets; run facilitated registration sessions with focal points; and produce the first gap analysis per landscape and theme.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;padding-bottom:22px;position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#C97D1B;color:#fff;font-family:Georgia,serif;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;">2</div>
+              <div style="width:2px;flex:1;background:#DCD3C0;margin-top:4px;"></div>
+            </div>
+            <div style="padding-top:4px;">
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Make it a working service</div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;margin:0;">Add a simple route for centres to contribute data, apply quality checks, publish a searchable catalogue, and assemble the first minimum spatial package for a priority landscape.</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;position:relative;">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;">
+              <div style="width:38px;height:38px;border-radius:50%;background:#B54D2F;color:#fff;font-family:Georgia,serif;font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;">3</div>
+            </div>
+            <div style="padding-top:4px;">
+              <div style="font-family:Georgia,serif;font-size:17px;font-weight:700;color:#1C2B3A;margin-bottom:6px;">Deepen and widen</div>
+              <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.6;color:#1C2B3A;margin:0;">Provide richer geospatial services for the Digital Twin, produce analysis-ready packages for the priority landscapes, extend the proven template to Colombia and the Mekong, and begin opening appropriate access to partners and governments.</p>
+            </div>
+          </div>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15px;line-height:1.68;color:#6B7A85;margin:20px 0 0;font-style:italic;">If we only completed the first movement, the programme would still be meaningfully better off than it is today.</p>
+      </section>
+
+      <!-- SECTION 12 -->
+      <section id="sec-12" style="padding:42px 64px;border-top:1px solid #EFE9DD;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#C97D1B;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 12</div>
+        <h2 style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0D5C6B;margin:0 0 18px;letter-spacing:-0.01em;">What success looks like</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 14px;">We will know MOSAIC is working when a researcher new to a Living Landscape can, <strong>in one place</strong>, see what spatial data already exists for it, reach trusted global layers without rebuilding pipelines, find the local datasets only CGIAR holds, and understand at a glance what is ready to use.</p>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0 0 14px;">We will know it is working when centres stop independently re-acquiring the same global datasets, when gaps are visible and being deliberately filled, and when the Digital Twin and planning teams are drawing on organized, quality-tracked layers rather than chasing scattered files.</p>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:16px;line-height:1.72;color:#1C2B3A;margin:0;">And we will know the vision is maturing when partners and governments in our landscapes can draw on transparent, well-attributed evidence to inform their own decisions.</p>
+      </section>
+
+      <!-- SECTION 13 — VALIDATION -->
+      <section id="sec-13" style="padding:46px 64px 50px;border-top:1px solid #EFE9DD;background:#0D5C6B;break-inside:avoid;">
+        <div style="font-family:Georgia,serif;font-size:12px;font-weight:700;color:#E8B776;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:9px;">Section 13 · The ask</div>
+        <h2 style="font-family:Georgia,serif;font-size:30px;font-weight:700;color:#fff;margin:0 0 14px;letter-spacing:-0.01em;">What we are asking you to validate</h2>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:15.5px;line-height:1.65;color:#D6EEF2;margin:0 0 8px;max-width:640px;">This document exists to confirm a shared vision. Please tell us whether you agree with each of the following. Where the vision here differs from yours, that difference is exactly what we want to surface now — before design and delivery.</p>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;line-height:1.5;color:rgba(214,238,242,0.62);margin:0 0 26px;">Read the five asks below, then record your response in the form at the foot of this section. Responses go straight to Lizeth Llanos and are collected in one place.</p>
+
+        <!-- The five asks (read-only) -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="background:#fff;border:1px solid #E7E0D2;border-left:5px solid #C97D1B;border-radius:8px;padding:20px 24px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#F7F4EF;border:1.5px solid #C97D1B;color:#0D5C6B;font-family:Georgia,serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#0D5C6B;margin-bottom:6px;">The framing</div>
+                <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">MOSAIC's core value is to connect and give coherence — providing frameworks and connections to external data and combining it with local CGIAR data — rather than to build a large repository that re-hosts everything.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E7E0D2;border-left:5px solid #C97D1B;border-radius:8px;padding:20px 24px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#F7F4EF;border:1.5px solid #C97D1B;color:#0D5C6B;font-family:Georgia,serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#0D5C6B;margin-bottom:6px;">The user sequence</div>
+                <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">We build first for the CGIAR research community, with partners and local governments as a deliberate, forward-looking second phase.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E7E0D2;border-left:5px solid #C97D1B;border-radius:8px;padding:20px 24px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#F7F4EF;border:1.5px solid #C97D1B;color:#0D5C6B;font-family:Georgia,serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#0D5C6B;margin-bottom:6px;">The 2026 scope</div>
+                <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">Landscape delineation, gap analysis, the minimum spatial package, and one or two concrete use cases for Kenya, Ethiopia and India are the right focus for this year — and a fully harmonized central repository is explicitly not a 2026 commitment.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E7E0D2;border-left:5px solid #C97D1B;border-radius:8px;padding:20px 24px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#F7F4EF;border:1.5px solid #C97D1B;color:#0D5C6B;font-family:Georgia,serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#0D5C6B;margin-bottom:6px;">The principles</div>
+                <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">The guiding principles in Section 5 — connect before collecting, start simple, coordinate rather than command, open by default, visible quality, interoperability and sustainability — are the right ones to make trade-offs against.</p>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E7E0D2;border-left:5px solid #C97D1B;border-radius:8px;padding:20px 24px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="width:32px;height:32px;border-radius:50%;background:#F7F4EF;border:1.5px solid #C97D1B;color:#0D5C6B;font-family:Georgia,serif;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+              <div>
+                <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#0D5C6B;margin-bottom:6px;">Boundaries with other platforms</div>
+                <p style="font-family:Carlito,Calibri,sans-serif;font-size:14.5px;line-height:1.62;color:#1C2B3A;margin:0;">MOSAIC's complementary relationship with the Climate Data Hub, GARDIAN and the Digital Twin workstream is correctly drawn.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESPONSE FORM (Microsoft Forms) -->
+        <div style="margin-top:26px;background:#F7F4EF;border-radius:10px;padding:8px;">
+          <iframe id="mosaicForm" title="MOSAIC validation — response form"
+            src="https://forms.cloud.microsoft/e/wcgeFbHJCM?embed=true"
+            width="100%" height="680"
+            style="border:none;border-radius:8px;background:#fff;display:block;min-height:520px;"
+            frameborder="0" marginwidth="0" marginheight="0"
+            allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        </div>
+        <p style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;line-height:1.5;color:rgba(214,238,242,0.7);margin:12px 0 0;text-align:center;">
+          Form not showing? <a href="https://forms.cloud.microsoft/e/wcgeFbHJCM" target="_blank" rel="noopener" style="color:#E8B776;font-weight:700;">Open the response form in a new window &rarr;</a>
+        </p>
+
+        <div style="margin-top:24px;padding:16px 20px;background:rgba(214,238,242,0.10);border:1px solid rgba(214,238,242,0.22);border-radius:8px;">
+          <span style="font-family:Carlito,Calibri,sans-serif;font-size:13.5px;color:#D6EEF2;">Thank you for helping us confirm this is a genuinely shared vision. Questions? Write to Lizeth Llanos · l.llanos@cgiar.org</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- FOOTER ENDORSEMENT -->
+    <footer style="margin-top:26px;padding:30px 16px 8px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;">
+      <div style="background:#fff;border-radius:8px;padding:18px 26px;box-shadow:0 4px 18px rgba(28,43,58,0.08);display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="font-family:Carlito,Calibri,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#6B7A85;">An initiative of, and funded through</div>
+        <img src="data:image/webp;base64,UklGRmZbAABXRUJQVlA4WAoAAAAYAAAA/wcArgIAQUxQSE8CAAAJcBvbtqpcPKMkSvOC3F1DMnpxyX+IrYiYgFe8UT/TUW4ULpHU9LPYLd1y8e34EPzP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP//zP/5//6YhssjK5yH0/KnTfqTuD6TEeyXnFabVvdr8dD1cAVlA4IC5YAACwnwKdASoACK8CPnU6nEkko6khI3MoySAOiWdu/APP+WCGvzy+wBfxyLbflf+ruzZL9rf5f8Z0Jd/fvz+Z3/B4LSiO9n377Pv+D+//vo/sn5/+81//PXV6VfNT5tO7feuV/N+mg6IDVbPlH9S/yv9z/bL4U+BX6T+4/kB7l9Zr2n+Oi+f2zalnyL72f2v7z7df6zvf9bH989gX8p/pn+W+4j6D3u2o//B9QX3m+mf8z++/5X2XPqvMn+J/zf7EfAB/fOG1+/+oL/Tv9R6Jf136PPrr2GP55/gP/F67///92v7rf/////ET+4YUvMiyHhEAs78+4L3Be4L3Be4L3BUZHC/KbxlRLO/PuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXt/QC1A9gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7grCa5OzaX52IBZ359wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wVhNcnZtL87EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4KwmuTs2l+diAWd+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF4+kkItHFbjv/nYgFnfn3BWE1ydm0vzsQCzvz7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvFrcT49JVoiB/87EAs78+4KwmuTs2l+diAWd+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF44J2QHCIBZ359wXuCsJrk7NpfnYgFnfn3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3BeOCdkBwiAWd+fcF7grCa5OzaX52IBZ359wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC8GBU1y/Sw9KH9SMctg2ZDUfqlGvVx+e4L3Be4L2oZyNXWXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9pibccwmMVbDHLYNm9WvH/Hxfv4O/PuC9wXjhm8jtL87EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be1C6hE8vHZF5mN4y2/PuC9wXtQzkausvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7ULqETtFNTmeUn1s6GKUEk7NfnYgFnfmwmuTs2l+diAWd+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvHBJSx5H5BUkMUUsFyPCKLqB2IBZ359wXjhm8jtL87EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be1C6hCJk811vH18YB5rJlDC6gdiAWd+fcF44ZvI7S/OSb+ZIShItMx2CQF96wyZXlPtai2MOHjg8pzGSoXxVqd+EIqVgRg78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L2/n11VrTjBvbUsJRFTKmi9USzvz7gvahnI1dZe0RbKHFSH4CSq0tUeSejTE4boI8/1CqMux3kcGOl3KvsgKl5PCBNGPqaiFZP6LVxUwdPyIoxauyNwP4WM1580CpbL04vPjBLEAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be38+mbQw2HYN4Da/E1T9VKV0SO7q3vUXqiWd+fcF7UM5GrrLxS8h9VJ7AGbkpo7zz7xiZhqL61P7kgdE4hZtay6YkWQrzXLJF363qJdDIwIA7NAGHZ28lVoSGSDbfCIBZ359wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9qFxz8LKlxNqGObm2bMH1MBx8ROJ+sGeTQrrqdB4RALO/Pt/QC1BijLrJ18q1yEbFt0Rw/2uSu7gZ2Nyk4gyjEM0Khpa0O84qzVdxhoLAH6FYTtJqu5D3H7vch0Xucu/+diAWd+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcFYTVXfzhWW8kl0o1NoEKTYYKseCEUHwSaiYIfNqZFkPCIBZthm8jtL3zVpqTsA8qAKw3QG5rkEXY3GZT7Dn2N/FAUIP8L+aucS+uaezI4mBzkpa5tlSeNrq5Mav5n7WQH0KcOlJhNI7Ys+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be39ATqxB9QFuFFs/5T0xWFv0EXDhrE4gOEQCzvz7grCa5OzaXtJmrM7hnITcuP7oLmuBF9yiAJ23jxWPzb7OJXOZvPu4ite9Jz860LxRjtD2BmXeTV5Z5hWVwIgrLn+KYnYwiM6KCOeAlZe0xoZTnkjGthr/68oNL87EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be0O1NpHHfn3BeOG1CsUwoUucGeo0jkaBkWQ8Hgu/MRI9Dk+EDQZFlj6VQ+yibILO4fHiJ00uJenHhcMbspEQorQkBZ359wXuC9wXuC9wXuC9wXuC9wXuC9wXuC8BKiHueD+PQRhX3U3yLIeDl52IRm9Rk/m5Y/5+Iy7GIht/3Lv+2cw4VJdn2EDb9p9IhsmtrwV7EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3BeJ58VtbjKsLpdKSQ55I0zZoXH4Rlu8m27ZWUwBjlnDYUJq0XKhivyHSH4y/NQ1nWe7/ZNXDLKv/+G2vHAY/urQqI9i6hzlt+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gpibV/KASgv/oOLpUdNiy/Nxg1xQeSJ3P7mrJjjbTSloG7S63BZfDolcPNW9JvzZ7Og68U3OD++iXjwnpFzRvDiEJJ9JjX25t/7PtuwA4oKjz+10OT4QNBkWUJBXUdNEsfdMybzW/Z3XGdQKn0WqBRGJhLfDDtBWPMF9awsohoD0saVVjCOSJG3h5I1KRsQTixnluKav5TcJkIx3U+6jTce914EKsmRCks70T8D9bf2xuyh16YDx/kFDOY3LNy+rovTyP1VWPrXZMFAVr90I/OxBtv2VjpJYW/VUzcTmASh5lbTqE9OlP3cuUZzVyGy0eiheoT06KOW2X59wXuC9oHEBPWIp8zaX93IFLRg2itV7qr3oVRIahmEWZdJxQ6kb9+dAabCBX9/eaXh+L2H4uzr2a/QxHcypSX9h4O8o7ylF+aAE/XVrcnkDenA6v8XbUlYn66io4SrtdQHlsd+q7KBJP/H6nRIbY8DOURuoB+YzIRrvCA/ERt/AQBPCa9Jo3fwLRSjDp+755I+cBKk1vvaTv8Vj5ZpSPYY5zyB8JGwG/veuYBKpjSxwG9rQwhQAtx5nbznOmQPQuZR2y6SPCQNPId0lv/dkTTjpeP+fo/BuUScC+CSfHYlQg2/O1MC/AVVavFAKM1+diAWdw3okHbpYUn8LDLEdmwO/PubNMPU3GhUeBc/dVlvKivXfUL3BVC9k2GCrJmA7nBj2wKaDmr1l2t6L81g3Uzwj/3A+aB7X+U2UWthRxb9vq4RvGqgknzBfxWWoaRmnNeElF6oDpkavBcqmi2YCTgOmVlkjTQ/EWRDf6N2TwkSuJdfkuxrgP8wQc8AUQ+/pwkaRiOolLK4lTNiUvrQ2U//2PHJjRsqrywE5YCT3yyhFmiYYKQ7wgCRE2FkLvAoMiLII/Og8IgFnfn2mFX4pAAL4jL5jgXIRyu0S3qTMjFP/nYfn8ohJDfZTTEkw8IgDpNhrP8HuNjlxlUaTQIJHpkvB6W/I/CBoMiykLTtp8kwlBqy+otcWb6/U/nIJHvtRscZcpUHt9/ZaEEk63eE7aqTRu+lV3svey9STv+hpWBwKJQqJGuiTTnAQYiHosgAKewQ+b7OwNplnHPpaP4w6hPrqmYc11vouIGtxjdS0F6qL9P4M22/xJAncKkoFW3liIg9OhnaCNtimOSqIYL8u0/fNWmSaVF+fcF7gvb804amhOJj0YlQUqVhLzHsNFVsQjJDi7MbKUOUWwh+wmjr43zqSz2lcx0KIWpK4Q8BjbkZ/yfFm/+pV3+agbIMCGg3g9zz44ZvI7S/I+X/WHYykaMammgNYS7ReElh9SZSLeLJkYMsq/4FD3FpZcYd1LaJwi3mLPpvk7yKZLsKu/rqrrJw8zcMuJQFXvi+N4yg9T6VWgagFF9DHxfvFZEUT05UmOkV6bvODNUZTWqEt5L7V3+iwhgyL5aAP1kWz2IzQv5j4FmWR3cM/0cMkWmN9cArGEiieJNjMWh4PrLgn+D0huACCR2aNLBXAI7KYwkARn/Jkn6ISJQoitGItNYw5+SmI5L4NsYObH/zsQCzt5DwZ5B8gWYoVlnFLISIaySroDYMstt0JoP6r3bLvfOyJnGyWycMNkd24tZNyeifDsdBEonreUP9qlN2Q39sYl4Cv3Ye7lg7F6cnoJ2pwkbL2oZyNXWXtD7HUx+YhAt6/JZL6B6yNwJssiHw8jqftfHZnAq1itiMzoEfTzWvAbSOvSILDPWm0KpeiKThRv75zI9kYNyJt7W8Hyz+MGNxTAsr8T1X7dano8iu5dcYaMkfici/K6pib17ACJSo7OlAeXJXjA+4mAN0Zd/ROweONso4H+5ymnIr/I7j1Cz5yWWlZ3u3SPNR+rR4MNtvn0VHBizlRP6wixcaLS5uI0YZQ3KQCZE2IWjMNL+P9/hW02Y2T5oZmJ1+GxLPuC9wXt+Egd2v5kC4z1mdpiqfoXQ/M9bnYupQy5ra2nTmk0gxsjRscWR5rhhhf/Smj9bHfOnJl8j+s02tzHMm4EKGmqjMbUgxuzX5ysXUOctvz72LiebHKl359wXuC9wX/6BofssnrDkfcvACh2X576klyHhEAs78+4L2/bebnFowLS/Qg6JJv7P7wGEWlL2KUz8Y/1jtHw3ca/XCoAzX/BEKK0TfmZMGrMaZgY0yLIKmtrwV7EAs78+4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4LxOQraOfNRZIYK3hEArvePImcbp2x35NtpSEO/PuCqIerZ6XGlLk1t+fHDN5HaX52IBDm8FLPPuC9wXj/S0s4dbWbjJaMUEwd+fb9prl3UT/52IBZ359wXuC9wXuC9wXuC9w9gZ+wjA63qwyx71Au/Wkc5+u0a2HK8HWyt5f/aN3xjF4qybfn2/oBagxRmq+VhyQl8XV//MhrExAtv78+cQhWIbPz2jWonX/dneJlJ/RLTdpZTcF7bjKAB03TvDcH95CN0Mw3aKDEy+5LZC9Q+0DDYnV9duLepzyaseHBrKNmNH+ze2PsQGPHcS88jtES9Y4DV7f1sHHkm/UGkJNGzEWdPsEzKdZT+qpDVihQ+xMIG4evxGHEy/eMubKCURHlLzD/xaMvcF7gvcF7gvcF7gvcF7gvcF7hEwgkE7zOFDbQ7cGBL0ugjxnb4a3WBurD7vtdLvpysj7VMLfPSzvz7gvHDN5HaX5HzqivPznVYMxgGc4udn8PWDF5zLPlGrHLukekiWHdUx6y8E0ry8ElQ119ORt8+nDFXpjtweeIegzwsE+R6b0f+ogrGi7gBlyXPrFDba9wnWg8sBFgIu6kr4+VASSO5+L/rLdOxLMHi5wdPCbARCyYQTEUNmd+fcF7gvcF7gvcF7gvcF7gvcF7g0/SczhN6AlXkUbZwz80GgpXXWWSWexALO/NhNcnZtL4JNKhYxwStZDLXYqmPuHOKyuy7GnVk8++05Di0o8yyl5RTGSlhvL84M7qUcXWW5DxlOEAuRPe74RzX8RjuzrDaeP48WmR0slH6Kr3bBZ+z6/gtb1hrsooCS8ZbSYiYU88oIUhc7JAha+GD17X7RHYAt4qaZUdNPtzs5YbWZkTyf6UhZ4efcF7gvcF7gvcF7gvcF7gvcF7gvcACDFfw6Z7EJOfsxj7ngJSl+diAWd+bCa5OzaXwSaUfohDZLmbcH8PgIi28ztmMTRn53oFHxsZIQXJB/6ozQv4OuXf/6fjDrKJysR+k+0KWOgKLUaXklJArjaWN1yQoAPapIuOrzER7dCG5hQhCSEoza8ERYVdfTdnauW5TabTndpi7WkPdD4ZFkPCIBZ359wXuC9wXuC9wXuC9wYGTFY/u3Q4oA/w+SLIeEQCzvsgFqDFGavUXRpaUYrBRMS2gYeZIn3mv2Kd0Lh7BD+0w38JFhuLQN+cBH+m3PTiSF4aafHv4sEd/Oot/NUyLqzygr2VzGENRAvZjm9g14OzmIYozppCFvYzBMfMnjJ2FC11kK2wyfKxniBB9wNzHCXnsCRG3L4sl9rx1hA8YOILtk4VsmbJ8lrM15Vjl7gvcF7gvcF7gvcF7gvcF7gvcF7f26qyNk/Ty8aKvTp7TYRf8WQ9Grglpss78+4L3BeOGbyO0vx7L+JTeIJgJzvrTgZwQ942+TnLS2kpzHC3ZPxjgFk3BdfU9iwVU5bW5KaQwJB7E+8HqFp+3pw2HMYy1L9Gq5roui5GQOtq1UNKBwwVNzE0J+rA3O1cqyGhcRICFFDJj3nvYgFnfn3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be1DORq6y9wYi7OLclL7gvcItZiw2jAdPdyH3LyzpQEpkWQ8IgFnfn3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be39ALUGKM1+diAWd+fcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvcF7gvb+gFqDFGa/OxALO/PuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXuC9wXt/QC1BijNfnYgFnfn3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4Lq2LwIpZ+YUVw/MKK4fmFFcPzCiuH5hRXGE+DAdflBdpfnYgFnfn3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L3Be4L2gAA/v9in6H7KYm2goUO2MgX5AA7/48//t1sR9bdf1en2m3tIpwpiEZ1y+Q6F3/31mHx/+Da5+sw+P/wb/0mDSKgAAAAFcWAAB/UaxBPkxGgAAAAAAAEwsAAAAAAAAdsQAAAAAAAAAAAAAAAz/gPogmV2j7B71d3AOCmIww1tQYO9Sos1okT1YUYPPLOI9Q7Qzk1B439ZQW9gAAAAAAAH1sC8ywkby+fkuy+QOe0PeBjdcFG9vKiiQ/hyQ3QV+QAAAAAALOVM68g2MgAAAAAAy3+HAAAAAAABEDryAN/KZiZgxuRhduD8G8WkR0bhPUZM5dOFZ7Zt04fGeWqYNGDfu+h7HsYY93T7XP6NBTI0F3Ub2rHP00EvXEWtJI13dB5gbFSCe7Rwrt8LfecJYUMVhCi2OSZwBYFQdk+Y1iPNXWiY2nL/aoenZNsKGgjXYVI2QAAAAAACEsNcJ0mxyC5ebYlZXamtJa9Lsq0d+Kfxj/0F7OU8AAAAAEd8Xw3DCWY5iQq6NccLuyGxkAAAAABNequQNi/GIHlXrz74QDTcB7CqnHsCsxskzdZOFcJ5jkuRhJ8bG7zevP1+SpeQAAAAAAAdUqZ+B3pfO4Eje+Jpjk4RY5jSo5UQuNvOBiuE4xIBGsSydAMmVUqb5pzeIesj0quTm8Rg/bATH8jRMbrvaXkAAAAAAAZ8qZ1GL7Wx5cSFkIZ82jovWu97oJWpo7cc9f+IVn2PUkFZ7jDMfHOo8BJSR6oQbgEieLODeg65IJYNrxvydsAi8bGzUTT2/VKBbylExlorM2A5P66bk9bkghfMKgM1NYxZryrTs6ChzW6Jj5SyJfDxY3nke1t+JL4ourBo/LeQXhCEA9LHJmXUWQz1+fEHUej/3NMAE0xTP8HgmH+8suvBaCvmz6JVtlekkFMzfaG1vmW/mL5P4K46Pr1BuPXR6ZXVXYSQc4D6iWgExitjp7IdQiQT+9LxVI7F7e3+AOQ3BhdLFJkNZzlQuUMNGqAhtjE5Nm450k3m/wMne4Si8NVsMacuERvOU9JhhL+nh3YTMRoEaZ0AAAAb8qZ/WFLOX6LzrAhqUPdO0rIEXTAGBFE6WD63b/GGnjIAKylFmmyzow3oNQyxBfCbHasvm/FokR2U/M4IOeH/D+eVOVDj6CY8TOqOL05v2yXMHVtgoQK+UM6UJ6+4MMsnKQsBw2J9tGoHS1WSzU8Eoc80pCuSNNHsN8ZjBddozFlVdMm/wLftqzzFgKF3rVUV5aZW4vp8wK6CadXv8gZrGrYZnuGM4jKrxYiUE7QvfHbsNTC98+evjJc8ky2VQab0PYif4yX7fz4fu9LrBTnTV0fHNYhqncsxiI0xt6YsJ2904waNqcdIEqiy8gHvn59hsh02QcveQyH5I2gbhEjUh2x4zB9FIcplZ0FoUc+fER9/KJ943ydFRK14sfeqkuGzWSK5bCDgjpbyskbkXvh5sf7DaQti+035rTk76LzAcKhm12X0asEH4KmuIfwCsc6Hz5gEqZYXnj7znZgDEIm0+sp+PbZXSARLsudzUYSoBYAo8SaCDsg/vsBkg1DC0ovJj1XWZJmhunYm3Bn6v0QUTAQDgDfwuKMrgTDgyT5kXRE5jZAg1SRHzZfQiMW4l7kN1QKhfnTy2KfQGNkN1SUeX93Wnb52kv3NU62qKu+RMPC++R/1XQc68EdVTvKfNBLh9DWcqRkA8goSd6kMiU7LXDcE8lZ0bOBbk0pU1lAtf/gQ6s42btUXppO0mMP1WvCZZswOITOAAAAvAS4T/0jYjh9l5LUrk3UjP2hkkQHDXcvkup0Ep017UdIxIjNWFDk85+a9lQXZFNPOlSiAf+z7SVY3AV2Fjp/KOa6bCr+ThdV9w66FC14IgUZkFUHepiQFxzEYPOgBKWdLBizznI02QIvS+yyFWQDvdg5o0RKHmWqoZraLHdC4b/Vk1+RymiaDQ2E0s3QzPsh0PY1Q8PpOGTvWYpWLj2pwS6RsBU9qe/piIZuRcnGf2AL3rMoVpcSIpR/UCYG7BktKAhMf9ekWWP7lJr+0Krv10ByArmrxBFzGkg01IC6Nom/hxPyU30URMCxTv2taMvXU7fI0Ba0YRwWk6fuNex5lLR/QMjyhpyBfFRMBpi0NArvSzjkoxxSREhdVRNARZGINvfz6KCOeo6XtgALaFhaU34M043K9Y+yNQArgIzbmlwyaNDIbgiR8QdM5c3x+4XUrTNOAT3E6x9A1k34SD4tzK/Q3jST979P9C6CHxyTTOuMjybvMdep9jAGgM7ZBw04FtjpUebA8vt698Kt23dPk3VQwaTxpGZxV27EbMPwltu2w3luIAAADgXmeLh1HSUdPZrGeWeT/szcc54VuSbQPBWrt/ezvIgv37VlMhdqAwRB6m6vzAj13fWHpOHp92o0dF0mKaGBIsmXV0C9Cd9mHlxkX/wQZe+bf3kC+ZAqqLcKJlPE8bkGGpqS3xUQDjlkHgPEmdb3C7TCA5BHhRjzCldkgT2sX+XMxvthILn8uD8YvC28zMYMPontYHQmzSXapGoyUeqo9TsNWfknlDX00+oAmMA/J3g533hDIu2oeP+R1pWommBhJxjhxX518EZ0gD7PKgik6DoUprAQKddHZJLSdydm3aW0yNQGWG9/MVFvkg8Ol9pNDon3nwkXCSHwYdDhmLhNSI9hWB1GblROYCehiYC3yieMHhP5h9/HZe4cJmrVdUuddAj2Odg1Mz6AX0sZgqc7mNxq8DbAHi/RamCQKCJNjupS+oV+8jhiLfHYx+KyoMQCXE5J66hX2EYJv5RIm4zTDWsrIEChiIA4TFpUV4SLQ+pGsoNR8GRv9I2Wv7R7daqsnp1suk+X2yP3WD5EyOumpnKUyqOdx4OwAbCaFJgR5wxYYdfaIrdYQawro1Idnd6NotnoCxWolChOpb+xoZ9QAAAA43DJrY0NH+rsHQ2PaDWtnTQn4sjxJiVg2BytzJfj5GNuU5F9DekyMdHGuTAII8eHJO4ha107ASQL+cdHMOVvuCt9uzJ5xwBZJ9IaQIKuWW/RXdP1G8ooXaaPPf5v3WxwrAEEkMRLo1tB/Zu2O0S5Wt8Ql59oLTSDfH5isp2nzfNB9Aozb/4xQOJ2VgSl9wexYU/qX0Wc6mQcrQ9hD8+PEAOqfvG8R5hRL16OXwAUpUuxi29eOHVqDnaTNYHTJFI7P8sjiJQNxLMLoVGU7jkhEDx5pYUevCWyyAUne1z7A/HW3Vn8Vswf2V5k5XINNebnmiEBcuU9gGtXE1dhGNU6Z2CwwczEGfMjz/zYMCg+OmePpf2+c7A/70lQdJWUmPndFlaVpm6N3GvqhIBp1leEXAXRYMwZiAabHDPqmtmOUVnWdrTO421Q8n4vpCPHqMHbsgZVnp5zHuHO1WIeUrqFJN0av1beqkanUXFUP32744O/h7YXu1U5RilTB4kSb0GSgLrvew9QJ2AKMOGX0/b/faEptS+8PafbS1Bp7fX5N7y6MZQTcijgAB8YZ+LDDANEBzYUtmOx9o1Ow8cvyMNSE2wu5iVX3nsEOhqpqZjMp10hahaHch3BhWoYAC7ndcJ4+GD+hW9XYDI1zyRKlw025r/3wIjnxQUaKIewYAyzaJAKF7u1KLfJuxuYLjiKl7+awHlV/4epQLU22MvvwSAAAAFeDL6vx170j71dgHOsvSKs2eqSUkvu+EpTslZzNyvX5A1OxsQOgEKRlfLpG9kifML6BCfyskPIKaHVEFAoMzykCEPoBF1FDqU/Ja6VUSUYHtlsRaxrxHBJ+t7MrRec+0FyrVR0D+EQ2GZPZUDcR3TcRd+6sQXTnxDEF1f/MRmq4mZYC+tP89SJJO2a6VrfcH9FfOBCxAg6n90RXUhrjmK+R82yjxxsW9grm4EW1n0N/KDLsh10/an05dD2B1HZtAYXBhvD8+GWNEUhPo8F6i3kIIea3vnIJAJtTwYPRJu55N7jDWieSLq7MRX75t57j2yQQS+O8Z7UlAv6zd1egGngtXjZZdAvI5QXWraVV8EYHfjqNKdG0dpKV1tnL14DMa4dk/TXf6XbSFpdx9RBGda4HkqlRyqTj4LCOY3+yq9ahTGlIlWL3R4e7ie4dT+DoDVXXxxxg1b0lNrdTa/YAMCNxDqeWY3vdcrVgyoMMaGqbyTrqkkkdPkupNgrS77Cp7666usdNBWx/SQtKy29SBperqhM993iOnFotRpswXa9+uQiz/6KgljKTgvEWOhHDn/r1DmdiJm5JY7XDjCNLzn+BSWTnokdOm+K003VEm+2t9jxWob+aPE3zWG/KHRcEkOKdIjQ1EzNqJ96u0584AXmLaUYiF44c3kXzL5UmZR6Z3P8wUqvpTX/dynN11hEYhClw3PJIUqCftOgaUE/zCoGmJw+Xl92kugbH6kzi5UAAAFN/jkruAQ+acVm+cUtuuX9GFQzE7QafGwWJsM/ByIhU7xbKtei+zd2EaqjXgzKouPwfdXfNfRV5AF1lIfKVzldo8tFq8hlFJK04iiFbfqetwcXolA0kBsPRAr0jYBbCiTMubRxqEG4598VnmoHFvFlwlMyy+WdRMDnMtViyfOSo8miPYk+T7vqZKs8gsTCRs0q55mcxZ6X5fhhnnUUz89vfhsWRrhEGgMH+ntOgACpYCr/0AW1BRAAAAAAAAAAJrw8nEvgoUYZyVeNs89SLawtn5o9J0Fab5H8loMB0c8HHdCJk7VnmVr++EDREfwAJPecuudxVUlDZMjyJRW5+72IH3yexjQi7U9IUCGkHVQ8Y+10OhDfrLspcUdpIb8gCvxpiIEVYkLwfNNuNHxabIJQLsQyfeHify/MYf9ipYljQHzcgFPFa1R48T1zaWKhTCmv6zI+TftAe67HM5ahK02mM18g7tOa4W8HdV9+WoPXx1D1vQGSCWSim/7dmi/gENOPx6YrFzPDAKih5pwxpc3WdqgG7gagQ4DgwKlXmvJzdnRajtAKsuVrF0pepSz4rX1FFJeJRsuGEZW8TRLSGr6QbVMKiRIkaIMH7aB2rUAAAAAAHv8Xekz97fXqnjXqNMtK6x43jHnEw77fdci0f5yV9f997jSeqFWw9citmvHkM0h6e9gaTv/BVba2XeMP0URruAtuwiZDRODdyF0R5j1Cx5Xhzj9AEoV8qZJcmcOccEcfi/myfauuPzshEvwhK/u0XSuFARrZ6l8hFr8pwEvuv1HjUYf6LIpX0l9kYW7nR1RGITpHlaBmDeS6SNMaq0khhbU62MLiwnoVsvEneY9tUUzuQ1c+CHJIVUEd1QE3P81MHhF6OatYFX6GovhWGFnDwTsOgOiTm91pkLWYuANexdMN0RiPBxY1SESz9fAWf6Mqg8/MjxvtW2GBjSw5g8VVOwkazeV8+67mmIlhm09KeIgITTYU3TOfDwt0Zm3GmfRqjGY2/6Bqw29KBlQ9KKwy5qskx+XdLoPTvjtTIit7/UvwObclF/kZF80L6w07Hd3EGpoGu95cjY1NZnq8hkD4rWrPT5cCrjDNfdkUdQ23K512/XuwD3GsQAko1aoJ2/nkWVRWMlJANl+0Bi9g0DNOCJRuvFCgcmeAAAAAa3ZcrTUZt+3mMV08hEh+zuEdWV7zXqCvR7LqB/Rsy9tcjKtLoPUtuFoXJPEoC31rRblwTgKVieSUEQYqKo1j+SLfBK8mH9w9DZeqeXIt0aiEgP6BmykUNfd4ErFIFqUGa9DJQhex3OC9SSW7UiPP1KNue4YTVu4q+YXl+6/hkRq0RQ1Zlft5hwYZEoWrlB1BZwMFooB7RaL/SwLFGmowVozJwIiGTL+LUykgHw7F160xg6+kqNcG0xET3NLL0G+//b6oyipxXR99LShpzNLWpJgh3QCC0HYjTYNbnXFGY/5r73ZvW8KJS0Kcho414vk94oKS+YoUkw71uHbQ/zWPqlUIAwYeH09EWRGIQOCh1/7DGulQpWpPFDbl6VHWTENtTX7fEGOYoU2v95qtwNRaL81eO4cXEspPX5c5QkgtMpzVonk2BFmqyLkN6iHCredtKwt3ZQzE+Q+9EcCmd/gu/u0i03rLSDw9YUeAX/BjkrDHPMv73c1L0M7f8xs45RoLibo5ehBrAWzOIjlt3NSKD+MKGMxTKa6O0Ahzht2jgVfS9USBhlH4lvYo/+klVifkz5GMbEYUX4XxL4hYiQKeKJ6k68M82XkO81CLZIOU3uz7LqtipnTb7bMTHXWTpGctHNJ6pVZ1sX7FuQ2uliJMVuhXNvntkazeMfbiL2+pfk0WnV+JM/HXt6lP+PX7/TJKnS1e4pgnJWQJeLCTvaXcSgdkq1peXnHBwQeAbuhZ32bSGqmPGW5nwNIiDshUwBDBQSBrYU3QWSrcvDtpUlS3qKjbI4QkhITt9i1OlH83z2OQNNYvqQrL57LREvzORWugqUwsRBvIOZVmPNz0XDurfxNM5T99zJEfBTIO2Zn3Xfp2x7dZk6z+Lp/k2CU5N40BhOjBUur0ZXdFsVIDmyJBXHbe9bRXQ2EtWciplb2UkWr/ncWgWns/xA9OGBwDqy1tKkI2XHjOt3I9efSDnAacaiCtnWb8u84TTOT/flT/C35dYJEzdvC60E0J69OUuB1CME1bX1AYWM0M5NF1h4exxiFm8n8Z4BRItlOyYHMiIqygaMwsmHY/RcNqwjGMTk1qqOkRpMJRmFuUjHDJL2tRnoPTSE2iHRhsOSL85W23lrISE9wx28pJHBCqIXWDWV2WTbXkMHBrzjohi4pGe7dmfJ5eK+W72QyPktn5UcAHQlhxpgyvafmTven1LJJ0jl6a0xymnqZ2n+AJFXqTgSdMVA3+UkCzMu6rTL8bo4eXjueVS766Y+OxMuMmbk/bOUfgqD8aGL3jMoDHRGimTlFK+eSxRKwdtKjE+mAsBTmox1KUUvvk3w4vyUmZ6KeVw8EEsz0/8VJqsfl637jqRD3v6coBU9fzE/LDPtDBIOFhi3elciO7fyEF0A8fyB92CH2g+QXdJWXEkDDm5+It524Vtv7/NGW0aikY651u4yVRtpSx6hi0Ww6Pljejg0aAqw42n48acL7GBV5kOEYJAwAI/xdP5cROCVhnynBBSnvTv/q/sK7xmH1Q1CWxHHA8pEHKP/WJKtylNjjNMaz3ZCBvrQDkB3FM865zkj2t8eLU2fybJupaQi5tQ+n6Rgwl+zYVOYkvfK6r2g3ZzgvMqzIRxgebg6MMQxgW7uJeMHMcipUgmnMKESgW9VnrzEABiVPFNgATlrIrznxaJIqCQjuZgWvcil3x5JiiV9jtq0g7aA/8mBxsNXIdLI3+4gm+8ysdKxt8xGKB4XMd8hZWsVL//1g8wzEf4n1Ex/uRWue1Kek+1B5KhG+NteoxXVhmuy0Vt4gwQH2kqF7NLaT8YTCO41GglqzkVMrO75FgAeDDxcQ19E7ncWZbePKSUyLb/4jw1i1hJucvxbWu7JP3QIVOHdy8MQvRCtK4X8a61TQiP+6HakuAjGi5g0LYDRc5I5SkeDq6ogtB5rCbDnIhgV2VUvVpZ5CQiltKZVOgAUt21zdJa/Npe/OPXwoVNbDptLmPjOqF2O4c5k5b1H7BQVZwBuh1krTb0Cf4os0nialpvWUMVO9mKaeUh80y/vAVr0X3ghi+MmODVwmjQuYHP3yjU0D+kHp9RPkgG4nWGHdgNUMYWz5XdaUs3e6PDXrA5AI/y43MqTG7RmUpcAsPcKWFDJkMLpsko5yBfURgq7VK9TaCLUd3kCd7CKRQwERdIVOH6wGJAD4UWGZsWNWwpybu7BxjiVW3AnJ2XRK28FRb4O17p4Dy4dQzia+xtQa4wQhzsFuV+BMf7LePSFQXXHoz+MW827eky9SPhMz6nPrrTYhOs4KgOhXhnAOSutXTYecY2XInoIqrK18MA+EL6VrJewSHZTdCoasLyToLtfmaGEWuni+RjDw+KQJOnBkeSHzTTk0c1m7Ugsp99buAFx+gc9lxClry16JFYN+mwvpRulkPACziH53QBna1kWMadszleMURJyePIWAyejm2n8iBs1gbrXssNi4rUt7pDJd5J2Qhsn1P99inz+0XeQlGIgbkKZd8mFzHh20v6CNttrjo29vmpYLVKt8BW+I9ABPbv9339R8YViarWW4RSO2J10NLvP7BforbGy2aS6a30sae+EjPndZo64a+Q/gYQ3emxH6Uo2PjypZb4O0hQta3l9koKqCEwdbbVWXqVjkuU4m9w8ZfXeQUqNL/DBPILGZktLIzSsH4AWssfKpiKpz5lapQCQoU4+urGVa4MJNRxTpNz0NXPBdlcGgd6Mnae+gopE4iyjRB9fQ007unmJSUgAWNlTrNQueDGSTmZJEE0mym2JCWZjsWFNMjprbaudEVpuy0aCDzSsJfoCq7v4vVjZeJ+MhNBpZwrbNUfMW6164DxTy/hH5f4ffipe/WuDRj+NPNk+21ekElBb/4NnVe148QOHHr4s0dGSoDFbEVqAZCz8AyXumWCpKLHsyDppfjq1a/5HJwgiVMouu7fcU16WcidKg00bnkaU7rDv2PVCtF9+Zij+5mQiWdotBMKQlEm6DPX9tuyXAe0sV+IxP2pR4a3N0PTRv+iXJTcIUKLpVpF0sp0U3pYrSvO+1LIzSw1uADk4oLCYF1CaU2gzmoL2GRcKhHoFMxdt0u0OuKkBvOmh4c0KCvY/mDKIQJxEv4SC4qyYtOhNtE4qCtyeCnJYHDBgoGxweQAJj5bJ5tdRvq2Fr9FmCquBc+kE/P4XdYWSuKoEb0bAN1yPtU+MOoNJYLOUSLC8mquJvrWxl7lKdQGGrgDUlaJE7O8g1vpcqVWoQFUaEeAft/t7j1JoKWBWtyPEm6kq2P0DlkCWoz8ZCgDqPGfyKHburFOhDAJa1QVjUUXbSTq9taQfyLns4QSq8Nsd6vSghI/yYomIsMf4G3DHm3texOSaMpViZXF4UZrEojT2xBDfIQxc01TCNMRiTqeBlGWARPUSUMRTx9rqv776BvYmKAU0ElPy4jEItJ3wJEJKSRTQVWn5+w2tAhf0CVQy/csTOubMzTCvDMOmWdertiBnZlXQPbUpAuPdm23jjJE8PlUgNuGWrGfbGaSnhwa1qPUwwE9SsapGxmT5Qd2RSWfrY0yCnR93T96rwEDJOCskWOrJimedjAzkFOieQ2MypwJcD8Lsu75CV1VFL71gtFFoECdTvrQsvKZvBqRHRxKfhPsmfc8bcbDjlwsREpabrBbhLrczusiwD/NHxbm/8SWzj9eKKeyDJvPaPGmcsmwOqmoU1cMdGvcrGYkp1N4jBFQM1VBECynApdqwC5sk7+GrQtJNYhdXCLOTRdhP0Tclni9+8dsRNuvH0dgDqTWUKaIAHQMNKGp+8FzNk2ffAIaLxjAvOgImVl5PQV2Z2kRdpq5jsJdnA7Ap2F/H/nr4nN4X66JBG0xHnI4uL2PF18Z+SqO1CUweqZ5c4PNOqPDvvcJRx/yLOUioguZCAObrWJKl1MQ74J/8LAPsAYR7gBIAeoqBu91SRdLgVAG6zmpK/ypfj6DVwCkZHlXWuypP5Faj80gfgYip4pOOPVb5960/hI26CUk1mm742RMtBskseqs/DZd9i6U2QCa4kDxgrIBQkDouDh7CSfheRz8Qq+LqA5uOzMUZo8Opuw5mgHP2GSiMIZOICkrLPYGtEmziSxyYgECMc0tGI9lqVS8GfGm01itDStdPPetnKm5fXIgYNjnxEr6XXvUJGhGfRLRJPZB5stVGXaO42qa1jqO3biy9MbezXmqyDqkesSh6T2DC0Lp44r/9wiSYEHEwy75NrRkAApLj/4UbO5+IR4ap+K7BsYYKoor2LqdGj6wan8G7Qq16cjvOn0xfjloGnGoFpLLsbZ0uu41k02kDqbDVpvW/uxVhjHFZMxrTqkE043PxEK3WrUT6nLMlSU77qg43LX+MkeLk60x0pPzoVTv66/xw4IgM9RnGUPdvZXfF7xTk+D6Er3z9VV8JK2V46E0L9cSN3EVAPK5S/USqdc5AJPD6uA8bRQcDZ7+brKPx0/00AeiRA7KRk3uRs8apnMsxm7tHI/1oqmDGOuy2qrPkEZlmV9fwh+lsCeS1CmhFZ9UiBQFTqIW0EQrCZH84Ts24AOazH6G9aac94dVdz06Rs6+8sz+JwhBuulo8Z3H8B3oj4vplvK/pdzGRAr8PWeu8ibGo6nVyIXumWq/STOZ2csQjf8vLcOT+F1Teoj5awugRskuF60kxzEfRUk9oQxX2z9KVovz3A25suNiIG009XJL5XtE/g5NDZbnCn/cuQYzE9cuaWBwuS0QYtplAZvEU0xUFwtY8wMJnU6XXupXaxs9heEMkikc6QLf8puqF/VLFqkyrO+ozKQVzbk48wXtwonGsp3PUsjFbuWw3tp1LsxZ8sjV9b6meo1KJqFrr8H589StLzPK7AvayQ8pzPCq1T400JQFYCyktNLmfPmMzwB8GPBzyHNPKuM7XUNGMTcGYB50oa4HSfNP78vsUHuj451VJqH0cOUA6+s6IzSn2uFig696Pn5WRWj5QHHFnx+dgRrky6AhIzSnSu699HJmADq6N761Qq8YdImsyZjrGuHtZ5ML8hZhLWMw6Y4cxBniGYs8qjQMJ3MLNS0Wap1tlYWbNNzq/LU/n631loTRcufJ9MH8rfDpuffetBxP6FsOWkxHwiFERhZputgPANZKCtGmSeJOorcaTv4CLyTB6fsFkdfBo9RiOuNs2WwMkAKZPExU72BgWx01/vJHDkxHZnIclLLXy+8YZNMcgprDmcL9WfVYsmSz+eNRDr0ckHg3NmjoHM5UXxA7FDt8Ntjn1Q/JZ2lXtdzZPC9w2hdmLmm5HJSONS6smY8MsIYlNPja18zZNbJptBJ1Gij+3Av9R4n5NC/TgbN2dQ/t3dV4i5tAjy2sAui3QoBhBsDDLuVo4DHqj4q1P06WQBfcaB5cp4d9KkA/cR3otK2DOEUCKBasO+3nD37Y8N5WBVWrcogRBhVsp8qIkZHm9f7o+8MsE6iCsE9M7/1OPz4KobuXRX8gNAzhLl/gSgs4F2yKh1/mHoRCxq5toDGAk6OlfAsprSBb3YgtyF4i60/UDvO5oLN1/Oxj4WcWUuJMGyIMQEJWNZGdnKplHYgTxW1tenFx0w8ohyAfEDOHF2MX0uUunIEdlBeyRKRCN06npMHXoiHr6SryRDzh5tYdRMfrS9w/spepIn9oCGDoNCF6Dp/hfbUn2WPzSDWi1EiOGEtotdNQme+iI11MtGZVN0w9E7QilpG13cKhmEid+t8kqtuR4bVFgu4kbnGbyWtmBut7lH7c0ODl9mzQsq3BUm7IQz8mdtx8oHbusAQpUnkauot/+iemWRrRU3HRNEwzhdibCIoOi1kkmHkIbqaMhQ3D0GRuLYsDBmcwhQMkcO0x3prMnjlT5eLHThtz8ojfdyjFOYyGXGGVjY3Ej8RQKfkhtueiP9zYCm4n0Cvt0Q0zSvfat2nbIdS518Q9hra7dQ3CRMeoPw1jdyvRlii51BwavbPm30NSXAN5oYNtvWgWOW2mNigaN5PUTec2zlGF9efNPbSacFYeC90rBMs24Mt9lkaA1co2IjWvsRmcAt/kQgw51J4vM3AGC9pwXsZWWQe5loCF8yhIIHR67IEel49ESA/SrZn/GUNQF/CipAkS1oWyyqgyw+qUhfgAG5YlBYjjKzdjs8zgbHuk1kFv4tiWz3xIbGjz8GU6grESb3j2vwhorhk6I908B9E6VdZhA97fW477l7rGluFKFN+B7nRrBLMemYcyVsvq6dZ0Tl8g2SIOCYH/i3QGCM4fTeaLKO5rcpgOqtpaJTnT/HE6dD4IX/WrsQ5Dt6rrCFFpgbw+mvXSqWA2YnCwqtPWCl6bmsPeOdzRdRato2+bRAxlVTdas4Op/gyWRht0VGs8UNxVMIa1RtOQG/Excv6CqbfIeYt1jAKECWEUlgAmhFGMJZEdVkk/GfqpbNK02HwzbmNjUlcv6dzR8DZ++P7kmlHwTIQqI+dX3uHHdWONoipOGpQM/Wup8XVt+NGBxut+r3gjnAbXzhgdNuWNgWqQvD9M+Vnbu8v/Mqt4BjHa8omv4/VSuLJnpvzz0CdFvvhuPrKiJSP2idKjK3n3To2eTJvWCP2/IwNbIkz5m/IPOmnIaL4+V2yXszsWzi3CNnPDbbk4doyml2Ca1M7/nh2MDnNPwuBB9n6VoWvmPI9bW9uQzxYZxPDDQrCUjO0XYfKboQRooYszJA7+6R95djh3k9gne2Ij3PN6baMsoxcLnn2Jikj6FknHFgU9tT93wNkV8KX3+X8451CZ793tGEDd9AYT6uxtYAUt5A1L/G4GD39P9PmHIHZG96LCYaf6cEDjkd76U1YhGDbkOvoqWoq+pL2xY/UufstD2J0yId/YetDCyn1kho4Na5XELtPTvW3mvv/EiPFhVQqoY/3dEG1tVCyx6OthH2bpRfeavAgJAHpSnKNC4e71kOusUAmf5mnu7/YYsyNiqY7JKYBtA40v2BPij0FgDhWChpA52Cb2uonOA9FnsrEQEnuO2migMu2O57xAdzkXiPUwmKxR1Zv18UthUmXoFvS257vWLTgF2p+LGUS6wA5U8TYFtJXiBhr6JDTJxjfMe0D50eHdkyQSTH1K8FpzuZL6M9+ak1vml3eqGb/wQkxqLrIelR7uTAl9/sxoHFvU1XEDYC/VmwrN1s3kmAjJzXcmZ8Z1fuSkSOTMz+3AH41BoZVHSj26vKxZ9wW2QXHyHZ9XKpmFLWJuIw5EMbfFdAoE0mcixfy7xvft0l2PxpgG814kr6ZoUXPEDRAusjdd3ykZr1eanEOVmwjZTVTqAiE9hHPcHCtEFPcTNaYMVFABdawZZ96kCgLuZcx7HayVwALOtji2Um/TqkyK++GaJeTbpJs7rd9yBzCVf7jwoLnqBmbmwhQrShTgFLouTNhlDBgoLcdlZoO5b1brp3Cvdnn5MPYPoBhKsobeoXsu/ssvBNri7z4R11ueQWYebwW3zmtAi0cTP07wc/dYuwstxxuxoINymLEn4+7+WmJm51fHDKahGFrr8kOK07cejBhVwBRt8b//n21gPQ2OVbAXUEsiVOxHJxhIntd56KMUSBpwTLmQkOMRICuyenPeor9ype63nNRLautBtqQzOErslrtxzzW0Czh1bCDUt7sqEGgill7zxpkxb4AODpTqFCKcVWvSQVG1OEgrg6gznCxw6hr93uNP+Y7wkTxM1nmZAL84W3oSeT3VPr9iph1G5uv0dlLGybCNg+jl+E+v4fOudoKa6YAlT73JQJPp29M2+2HBBQG8EzFIQ11QFx9SXGLR1aAyNZBddJ2FuDOjSZHUQTejt2EWchjBDGnZyGf1lrZFQhFXZe8yG5gTfL3dWAoz5rLOopUKXNpWm7+V/Z29q5S3T7VJvBUk3QxzB7uxtXiCfBa5FEpcWsaXtNgSz2hh6yfZcAO1YG96L8u6aPUU3QD8DB6nxg+/8YIKDIYIXZR55xA0APkIajNHpA6z46G81q40K/BlLbbqYqTe8LjC22jBZ6s8krM5ZlIYsqT1GXzRg1BXg3LuSbXUN1VGWjL+RRQfEaQVTY2ZqGxRhkLbAp4XhR6GJYx7MPHOGYDVwuY0HlO3ctbNYLNeEPX3kN1JW8XSE+xTIsfYhyqIVpZNO5MOyfyrgfK3iG33i5Dq3no+9pDeL+Zx0YcQ8pQmiNB2ap8gZkuCfxf1NRo1IjqaFDd41NS5U/a7l2lN2ejagdhWhLFD9iiDpI+EctqasyhVo+xcJYUMCjx4Sl3wFkn1SEAb/bb1KYKsJvK+EmfLP/yXAc93xe9kO4w0wUON9phmJ2RwnrrC0OiXbJzBniJ9ToKensD9d092pwlzpiXdVoNz3Pze6YumQYo4MD1CIEkYCfZiRm4gt1La5xrtACNd0vV9+I8/5BnBjlAUMDM52VKlQBoDDejK6YDNjve8nWnRUo3KNTqY/pos+QcVoZBM+zXle+X1N9fCaITguio/Y2EeZKJU4JMYCkhfJIGf3mh9jCDCahe4n2K2dpyA5ZBiD6ol9QQLu9AYpY3e/U/aW3sVYul+ygloxclvsAjt3KodWvlpwuZ29qRWqEqRSMbKO9Yc5mNq9jXRW5FVfZkxRvZZKZGXCXVTggWSDdk99gWot/vID+wt62O/zMSmaCfNrsdHFUNHhHIC8JgVht6DnwSPIJevsnG6BMJVI0maNgjkIOJvImnuDkmxksUssh58lfVcZHQL8SfRVLWyFgjkPJHo7F7Cx+rQlllJ9yGMeei/a/n4zcDcmCh19WydpHrPN7wt+m3oAGXjHzJdljKfn7xBjhpjdBJMPQfcvuJQlW4+9LIzs/MXNneAS/mXNMTlHP6QdtcwjtQXTVlw9Ifg+TlVNaaPgEzBUCnUCrRAVqB1/ztBGLJH+1OHqA7Ajo1JEobMrijaCn0x10xODhmZaF0u6Y/1CdnE5/ncbKKa/kndnF22qe0BcceLEsKMz5Qx6f+issGOHyV5eXxm/2dHUva8i6g5GyrTlBIejQ4ZtG6AGadcavsONpGeaKv7NAJR1ivcYa06FzQgOKOSOPw2VoBGdRyzZpTA2HF7S6zMfYRVPZtkZOrfkClw2WP8kpu913eA9rNyADaCzDjKZYb09m8XQmImxehIX6t3VFsxotOyvLZWd2n0AjPCF1iJR7H3BI3tC2k0JSAoyH9nttcL2h2bp1H78kxzchjYg7BgMfTmOUppO7uK7HuFrznRrD5le2fuUETAjM+IxGbbvT+5E4KLoBp+MJOG2F6GMZ/m/17sTej13ZAevXk7OX7aOpNgPgbHSuf2AY1Ng26ao57szAmDpozLW0Xp1cPl5n8fbRQ6/AXzL8eOQ6lg+h4Jzw1FGPqKocxZodLXMb0OVVAOI7AE92mQ+bRSpn6LJMn+P8pX22Z0oT4InrnEV0rVoKwQEtmxD6VImvy80Xl47P+ekmt4LDxzR7jMueAao9NVOCUOzcEFO2Ry53MsN2hInzoP1a83cmzBNjuQrlrmcUx/lqTpoGdtxSBaryq0q3DJIjt56X1SnigSKr6cWNQdYoaabSzDXSp0pGIap4P2WIag+Op3JqxXeNRecItIXMEFr7DW8oUdBgTLYg6lgzKDxUcYOOMINwhR6kAddzBII74LAGspeDCMVqL1q/ux7fL07/a4pXJCkvzVbgqa3DVcdS+srF/y2nXpks7Y+oVedP5fDGQgiWrLJ76Nk+VRD4zxAVmeMbGalcK0HKnqK3h+U45fwSXT/Q970EmCx+iTw7AqtbkVCmQ0H6NC3j0tac+Nt+ABTvVYeit6cpf+sCg8QJiHDjWoQLp/SrjT+zBEA1IFXcs6EhoexO2CXjTQ+UnXRfwEYvZFGO2gNt8RcIBfPtLcSfFaVQlUWH91DrZpmgv0kl3apd4M5WW9S9lNBtQJxmVjdX2dZoafSb+urZu0jXqQTLnJXlujdJoHSFh/rqfqeWQmNHB8mUiAqufeMCLr+sVkneVgRa0VR/uHEitHTw6Cu3ynKCd5t4DFFW6eQd4qQ3eL5pEqgBCllHjyKxA9AC3nxYpwjQaTkFJduSs9CCTambrNO7hdiTuUS9bln2JpOK9Fbad2M1bh1D6E0NjZ1QukPxvmbQwX/8gLwec7D+O8sqLOFtnP0QAmPOrM7ljY2PjWxDYnXf7pnqTrd/JwN3vocV9fwdnLsBR48T2L0CvbcX+O5UqMaSKJVCniOzz2IQlRTgAh2zjItc8kkX1WIHrXlab7ryNN/FL0Ltzcbao5l7nscid5gDHWR2Gv72dEn/wk3sKlfuRrRCvBT7V9XvDGLSbGSPVX/W9U1iheJbQrILzxVnDko5IRlSB0VyXA2b1r2Zv5/anbzgCldsX2zTSveWqCSQdwR9msfCtjBfeU4sWrftQONE8bD3NsvSvCzCkYHMieMlZQ2hKqB9JjvBsrf43rk83YTSvNmEzzpgge5qe93mQTdRoeBAAAAAAAAAAAAAAAAGZ/imJlsdreWioIqz0wNYa3hwcVj+3hGNfPOpWfKxMMMAFae8Mywzc0Bso8bHCrOG2CX7w3icWHwp2nBQAK6JmbOlO4HPjeJsn/+4jhGhW6FDJIWWRl1aJI1iQQJorqEKvlOvkDBI5/GEe9soJdjSylVdwsOmtB/5iA5zf23YwmbZCkE4qEI3hz5YH8wv5BVeq5pLSVUoN8gCHB3HN9vnGAVNT3TtbazBUPMMOWn8/VzLDDkyUKdaZqGeG38N5LmwtWCRpmnL8RbzxOeDFV5+c++Z0Puy+vzhr0m5iAcK6m4LKiJhU/S6iCs8c6MOKGK6bHRlBKEIPaysLz2QdEQzaYt7dwROcLu163cIJdrbVrdWLHJcLixkT1t8i9cdEJeBp/FY34xvo2QAAAAAc6qY5dccMvMsB9gyO/2Yx0kSHB4R/eZWkPWO4hDctPZ9ZaEhAndCd55NqCdKo6CaD1m42hhKl6E+JRi5L8IXtz+q5RIzSY850PEeSAc4Sy8wkK85VzPy5+prFPUbtnmjOHoxl4wykf9QYxwLnueE719sg2/guKEhHxhOx6ojAEPXfcgVLxlraETRw3jLmk15lPn00j7Zo58AUhUcqncIYhsrx6QjqaYDnAOFyyGcYLMXXw2OQ0GvuuVnE+oq5yZFQK8gxX+3puwJIYDgTxZcd0gzX+K1gJYFpSHtQXQFGvaOf2/Q1lHHHJBCmr5WmpieQElZNGxwAHlcM5GRnF9KZJTfjm5MB7nc3suqtgqgaghfQhd63J22OuqgAACd2gUICORYm2xaWnLC8U9tMlmm7TlFNv8XDHmo1j7Ny6ejzOMY0vlsI5Yriqdgs+rcoW4MHVxLhXaUCdZN+VW6oeFATA7rVZ5Eb0SROgFd/3F1aPdOt/I6Bbbn01k4EDicK/ZuN359QFcLv2HkIKBwTfHzJkscFSAjA0436E9onYx6IbUfNKB2Im+0CQ8N0AZ40bBZZ5sIYIlz3ZwY0Jz3rXZ4Wjv7EtAwiquf4Q8zOASTYMJTOdRKI37omXZ54/u/df0KJyYjsY+WRz65bxKkt2pR6DcQf9A45Pn3g3u0hjpDcgsCyxwP9dEZ5sGwV6ijhF2bVLkM6bFgkWC0U62BMPo5yPoc0wnUjyj/99HykpL4qJy8JkCXPxDhOkLe7Oe5I5KHJV3/iaCqT3aJmChCxw/YhJxli7Joh+sXF57mmBbnjOJqUSvPAQcyaAhykYGcmrKrQdzwcsRUwTuZo4HmNVKBb/c94MOurll+BMZSUIf3khTcMX4tsNCJH1UpSBU7vacw9m8UdD3LQ5MuVzSZAXUf/c+FnmikMQ/8rbNIM9hV+uiwItWRq2iMpnvLrRwTzbKQX9mZeyaTnb8p2YL0xdZ9HZlrIyI1TBDkthWUhja2PwQsj21ZHUlgc1JYFrJTGDT70OxjEUED2rJw9vLdQJR70c5AGpESiJGfyqs+o5+fMHdQirUcqKTM4IvrYgpdExKBPhdjYcot3jvdsG8rcMA0R4QF8el4OrjnPW0D8fmj0zqhpy6ljlZUm3bHNzXw/u+UztAH+gncWukvfnqjSrP5iODbsbeLM7Nv/eBwyV4PVO6/b8LY5KfqsyX3fJmw5XXtBPgre4FU27GO8whPU2zc1HF2XdjqcS034pyB6/ObHab0Q1PAGXcgcAINA13oZkW+LG2n9oPuebEryjHNaNwaiPIOkvNRYY/mYVQQpK+vzV82rvJxkWwXvrm+9vWQfnai9Lq+gQOHePMVY9NUy9lP1Pcs3zPKEPyfYAmF2Spx9uIIsmRuPhmSJfCxX6jPdLy4qoxEA6FsHYhR6DKrN5PVKUvbauzc3vI4/8GrZkRnGzas+SAFJE8pyO6W1292Rhwvd0xqe9HAQRp5IInSGtJycfueBkUV0N6Cwmgzej4kSNuEnI9i/PCLU9TqPD9FGSwplfmg9WIBMsHRULRHW+0Eu7WlQO4XHpUmWQ7hPM+F/ZLfVye481YShXaXLrKr1keoYADAK4khDZqycS3ehP69I879a0CUJ/zC3RyYHCK2XnciNkYnHE3q1qDGjgS3dqUsxw6OOHzODz+k/mQwoFFOq+Mz8g5CeySj6ektndb+vjMZ8A/SaUa0GwunCQMCvNF6jRkC8z1frtFEGuVxyVD8ovj+QeKj01ChIFw/kpwz+sxcnhrUOK+43uUMXZ3AZNlL7HLN5Bs7v61nAEPXW0ItNz+qpNFbid3Wq+UKKAnf6hT35Lf8+RfcoAA0xk61GnitK30Wwiq9iBik7Qs5x9Adzg2oobfXWI85HpwApYEatz6Pt/ni2QIdzAOU82dm69OGzG3LS6kAejQAAJbHHWRRIAr/9MSmMbv9rgM1OwSFVQUhRRtY4z+enMp4egpXRP1X9ObfvvtaXz5mW+zd2/BpBhs6HF85T1Yvg6rLSG2b3ekPkCrdolGM4r5DesjgS4KA/se+7x+nT8APA+35DRZhreJWlhoHeeNiT2bG7vwyZzvWQEjQU/9kmH0Qc2APHcaIYM/daYctAEYwip9WrW18bFggjRehpBzSh6Oq3zoNuXdOrjf0kjhFX4o6fhnM5pL+/yI5v2K0hxyxci0CKbQAKRhUCPr2LDHv9MpwLdJw/FVtza7ZTKEfIfMM+hN9Al8ACLCLNmKbfL/gP0sqhj+aC0Wt43iBKtA+rCpFCMgUBmBZz/1rA84Xe7RtXFsbvVkeOTZEmfE+gYPYLPyn6/zj0JhpcsY66H510JbbbMlLJC7yvWmy1a18arMt44qkIXozAV0ikaC/jH7Cv7P1GNgWlIvrg9em+NBhVNis5Dz9VC+X8WBdA03+OEn7R9kD6N7YINseG8YiXVzlTV36/44to5ckv8vkoOWaTmRDyqoVw25Jw7Dr6sLl+fsnyIhersxuHFYvkYa4r5Nup4Q517I9iapgIEM+vTxu0Tw2/YMC2nJot6Pg+l0fvYEPlRIgESUtKqfkbMcMTawUgEqAhGwiFZVioLg+yEX8BuOlCHPKBpPUw/YTGPXxJoz7RN//6nnTJeIcdpBXsySgOGHikDKbV2PVR7Oiv7/YHpQhwAUPQ43l6rO9DRCMgcb8Ui1MUZbqRrx6C0WeiI6vM8MYP6U3rSB94IU4MZcV1YUHcQZ51qXwH5kS5dzJcb28gTn/QDvg3hbc+QvftVL8L0HXyNYorK95CvA4CHJWbQ/X3Bu5XrzEgski659XpFE4Qpm11+DS0GF2XreVu+7KtSMd4DpzvOz9N5mmjo+NXM2ucPCMIJy0AhtMhsHYXlDS/wgl3lVEV3xc83bkB1i2xu9OTIS3xvCOEGxt57Wv8kTDJFACcBkuzlGrz0vkyC27iYox/ULHP5iTWcswu0mfrrk3ripjQZ74M4tAAjeoabNTQ4vQMZdfXSBYt1PS/+Uqy7u6MjZx1U8AAACtsN3dNBvuq8Tpm7grDhsPtAeoHVf9fQPLk0Xa76LJJc1684ktlK6CpX3W5dcEHw5s7jdDvBZHXgyXwekaiT0jUo4LfnOn007Lf5ABArjn5qltZ9caqwpQFbFtNL48EGN0tT9QWqQW6dlrx2Ii/NiVpoIwzysMwbYI4A7p1GF1Ms9MkWxBTlqhqlxJe2QR/OZjhIvjiyhxgxk/7eSX+pA/FfsMCeh68hRZ9CTLNyKaDNa4rhOHDVu9RuxEquCcoBautf1Tz9/TjRlvVdcCuaPg+wXelGxzpqwDiGoTyLu5DmST36ayr52/CyRJ4+AA89W+i0FzSdc+vtrf3hs+oKFKCPiHLVWh85L+eZ1YEXNuuxHdFGKWR/ag/AgFzmOk8smN0KTa4CmIBReV11gR7AmKv7V9qabIht3pWNI+xZ7ubTPQomnuyjpJpvW4FFq+ZSEuwGnRPMHnvgMb7vw7F3XyZNDn4u8rZBBwJaL0VadeM+WksKLtvtmtxGLCz1ZSNs1wDwRPdV+hz0RC8146gZk2Kc2CSv9igt8dM9OUnkO4sNeI3h60KOFt8fvAqnTKWIPA0MaAgbBrNjn+Q9yN0bNQfRYJjJpv5vwK9zVquHSxftlsB7zvTyKb4z4Bld++LE+BHAFcqhJ2wj3C2DomWNvDZ5uDGjMPbVFUrLRTvV/0HJwksTveRnfZRxOyE0CXrqiWVVD6zq5AuWwdnEFJGoIr8qqTkqu5KDBRu4sVNdc26LvAT4GXdUDKqgKUNdHcCt/OmQk4EjYoYEQvmb8IMmlNdvCEibzBlzm/UeLYIdm1h6QC5PRKK+Ee7Ou6pQJW0EBMg17WLna3HBldi03EZa/ELVyCwdDkjz7tZIDyIlkfeaL2xIY48OaoYO3Ga8vtws1hXBokOXZYnc349KJSw1aREtDeNk2yp4aQ5jghd3IyZpCsBRvAmAuZ65Qp1+fdmViryngABu6Kc3DDSmuCpi0Y0FxfL+8D9Xd3upRKYLljHXIVpTx8O9qe3FeDVSDOoHZkGySWsYCdXKS0DuZ+dSYZYo9GVu9tenx7i0Jwf4rWMf+HjnDDtrJcIhi0cHjFAz4q0gFHsMTFyThVvSK2Ws7CaBxe1lCmtsnfcIzSC7jj132roRKl2ip2KkD1CiNhxpt25Re3oCoYhsLcAK0rNv+EpP4rowmaCLpRcC3pSTERP/aT9/ET15MM0voQZ5Q2hVq1UEUp805GbZI37R9gJM3zxuBoJBCHjoJlbQWEZdGpRwPeZ5cJR5zP0PDsYdlKtD+6p7mO++/aAn+hsU0LpKd1sJ6qBj6z7UI6Ol0PWto34nRVt8Zk3xyKWTOc6W0DzuSakFYqcyni/tzbe1nKVJghcn7huPP/sGtlBNhsIAMBZGUxb4x2BSiOwJb+wIpn48TpEA0k3I6nVCWIWHy6gAwu4kR4iJK6j1Q8ZQa0yB8CQWgk0l9Qchb1a3R2uf5kU0wFVeRFuSZ2/45m0lEGsFrkqlwvfv0h9U4C3DXbOmpNz/kpkSMdRXXjD0GW03HGFHYKZyZEeFHNsZQtlXnotn+LEk5Z1lOtikye6s/h15Jf7tm7wrPXMXLYEA3C0CWJ0PLoS8AZfvyln2FM7N67YTchg2VlbbGXPa9Dx0XwLBOvJAzhaNQTeiWOpggtHTc8BeDnhivrWkgJsPG1sWuE4QWOLZ1dHtQAAAkEvdS73ABvbxDKk2JKSlgiXSxl1uJaj2ai1LK8v+tj3VSpNL8PRb/uI8AkOkZePUWSZsZglc3ecCKnuiZ7/5915fOnLhcija1zRXLVFEvjt+Ybah21pZKwbH4Ymf3ZGIawjrtJ76+M6YOhkQZ9DryRaIub721+NBeiARZPDh2dlvLEzZ+oFjF+Ar1HJ/kGAdH6wDHx16qkhDUEdej+RXuaiY4MzOw031mf2IF9e+tJ5WxGUI+hefw3fTNLqEXNKeavBvaYzJFQPeJJsOcTbtNnG/ivSvYzIpM6qYeQOk6Um/2VtOFZv5I32DOyztjd9vw81TYGWLgP2qDklH5l0RU+jkscA8Rx4eVCuQEcp440gSXHK8siU7J1nWI1nv//4GdsM53vOSi5eKkPlKjM5FS3ynDszsqTV2tonUbWB/mAGlYUv7eEJjUfwEpdZqvh7VHtL9nu0pT4h2qbIhIaCPCwOUJwUYtMND6xqiAEWqfsm+Vnnm05csrQJu1sYvQqpcNHPAbEIIBPZFksqWU5NiAhYByiOQg8OsnJtK6EYD2lREb0synwLk2R7NpuhndDGcZVQhgbL/JsIWltUn9Lmd5ILHo8Xg8OLkD91N5QQVqevukA0WzYgTI3g9RxT/zrxXeHH3dh9LongAgUgrHBvi8CQiOnbFlHynOAdSRmJ+lW0cQ78IjpLz0R5NpKSWl6WdINyTwQRv/54b9m1IlmFrMhFAIe9ZY/3FowGhis3CMqfcLSPBqQ2pblS8kDQswpHyWp6tMtAzk1nNI4/5ZDqDpVEenx8+POZ//0+iTLodDU0ZCdWAnCxZii/LpmGrRWZCF06ZUQuXFruMPlhUf4aNofgKSZX3+6x3F9vNCijBk3rJwAkXFAiWLQZCuLsqzw/kbzIVX+t5/ESLI0diEaIUvLTL5XDVXDhj8gEW5HSRvzIrSop5A8RqS27f5qm3g3OUVS8CYCmBuvI6tISf28GweT8fjfN5EL/nMZvJRqQH65+GpQhBERrXKc9mj2AABClP95z3KemG4riIWghvubHqEKOMUpiolqBxtpLzHMI+2CY8pHLtowEZaS3f+qCVUFDyaGsdSk5asQZL/ohit2A3o6ArOFgeUUwE4IUGRoYB4jaVv0yt+K+JuBWOJ4cbrDgveXXMapp/sN5oxx7njaEdT6JL/7bigN3YolBIJJ/jTr1ftZsLk4Xs2TinF8iDBFWCFqireZkcRjHjSiv65cfaLFQXnj7pVxOdgM5LupFIE8O2F4hpJcb5DBpkMUPy/nolQ+to1e+Vyn2LuUkJjM0oFMnNoHNipL6/Kv/ZPrAzf3a4mNUZi5JboUWsfRTPM6/y8WBllUG5DND7yi72HFzNz9NhJGFlyzqDrHTJBaW44eiPgdzgw38namaUqD1QgvSPEgZzo0EKaWmbQ0mNl61dT9Rsv97/TrLlnUHgC/l07MapPDQX5YQ9W+rNQ3bWApXG1yHTiOv2w29jYAeeaWDBCfq+kScC+fgA8BPUfKbeKA0mb8lSjzvnzeF+VVmPdZ63y4w1piMeXblkatZLEqwHq6E+kHkf8wyKXtSAchQu2Bof8IP4PTOPybkS8fGrpw5QU3GvCCJvsL98bcarWDTkussZsw22atclKDt2Xnkcrmn3+YyTAXWO2Yyw2HoVEX/gkrPxFfcGlD0begAAAABZ5AAAAAAAAAAAAAEAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOVoGK28rcDLDvBK5g9qBJTXq13bVn/7/TNVT4GmoAAAAAAAAEVYSUa6AAAARXhpZgAASUkqAAgAAAAGABIBAwABAAAAAQAAABoBBQABAAAAVgAAABsBBQABAAAAXgAAACgBAwABAAAAAgAAABMCAwABAAAAAQAAAGmHBAABAAAAZgAAAAAAAABIAAAAAQAAAEgAAAABAAAABgAAkAcABAAAADAyMTABkQcABAAAAAECAwAAoAcABAAAADAxMDABoAMAAQAAAP//AAACoAQAAQAAAAAIAAADoAQAAQAAAK8CAAAAAAAA" alt="CGIAR Multifunctional Landscapes" style="width:300px;height:auto;display:block;">
+      </div>
+      <div style="font-family:Carlito,Calibri,sans-serif;font-size:12px;color:#6B7A85;line-height:1.7;max-width:560px;">
+        MOSAIC is an initiative of the CGIAR Multifunctional Landscapes Science Programme (Area of Work 2) and is funded through it.<br>
+        Prepared by Lizeth Llanos, AoW2 Technical Coordinator · l.llanos@cgiar.org<br>
+        This document draws on the MFL Living Landscapes Geospatial Data Hub Proposal (v1.0) and the MOSAIC Brand Guidelines (v1.0), June 2026.
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- Configuration (status label is easy to change to "Final", etc.) ----
+  var STATUS_LABEL = "For validation";
+
+  var sections = [
+    ["sec-about", "",   "About this document"],
+    ["sec-1",     "01", "What MOSAIC is"],
+    ["sec-2",     "02", "Why MOSAIC, why now"],
+    ["sec-3",     "03", "Vision & mission"],
+    ["sec-4",     "04", "Connect, don't duplicate"],
+    ["sec-5",     "05", "Guiding principles"],
+    ["sec-6",     "06", "Delivered in 2026"],
+    ["sec-7",     "07", "Who MOSAIC serves"],
+    ["sec-8",     "08", "How it works"],
+    ["sec-9",     "09", "Fit with other platforms"],
+    ["sec-10",    "10", "Governance & roles"],
+    ["sec-11",    "11", "A path forward"],
+    ["sec-12",    "12", "What success looks like"],
+    ["sec-13",    "13", "What we ask you to validate"]
+  ];
+
+  // ---- Status label ----
+  var labels = document.querySelectorAll(".statusLabel");
+  for (var i = 0; i < labels.length; i++) labels[i].textContent = STATUS_LABEL;
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // ---- Build nav rail ----
+  function smoothScrollTo(id) {
+    var el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 14, behavior: "smooth" });
+  }
+  var toc = document.getElementById("toc");
+  var tocRows = {};
+  sections.forEach(function (sec) {
+    var id = sec[0], num = sec[1], label = sec[2];
+    var row = document.createElement("div");
+    row.className = "toc-row";
+    row.setAttribute("data-target", id);
+    row.innerHTML =
+      '<span class="toc-num">' + escapeHtml(num) + '</span>' +
+      '<span class="toc-label">' + escapeHtml(label) + '</span>';
+    row.addEventListener("click", function () { smoothScrollTo(id); });
+    toc.appendChild(row);
+    tocRows[id] = row;
+  });
+
+  // ---- Rail call-to-action: jump to the response form ----
+  var railCta = document.getElementById("railCta");
+  if (railCta) {
+    railCta.addEventListener("click", function () { smoothScrollTo("sec-13"); });
+    railCta.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); smoothScrollTo("sec-13"); }
+    });
+  }
+
+  // ---- Scroll: progress bar + active section ----
+  var progressFill = document.getElementById("progressFill");
+  var activeId = "cover";
+  var raf = null;
+  function onScroll() {
+    if (raf) return;
+    raf = requestAnimationFrame(function () {
+      raf = null;
+      var sc = document.scrollingElement || document.documentElement;
+      var max = sc.scrollHeight - sc.clientHeight;
+      var progress = max > 0 ? Math.min(100, Math.max(0, (sc.scrollTop / max) * 100)) : 0;
+      progressFill.style.width = progress.toFixed(1) + "%";
+
+      var mark = window.innerHeight * 0.28;
+      var active = "cover";
+      var cov = document.getElementById("cover");
+      if (cov && cov.getBoundingClientRect().bottom > mark) {
+        active = "cover";
+      } else {
+        for (var j = 0; j < sections.length; j++) {
+          var el = document.getElementById(sections[j][0]);
+          if (el && el.getBoundingClientRect().top <= mark) active = sections[j][0];
+        }
+      }
+      if (active !== activeId) {
+        if (tocRows[activeId]) tocRows[activeId].classList.remove("active");
+        if (tocRows[active]) tocRows[active].classList.add("active");
+        activeId = active;
+      }
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
