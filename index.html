@@ -557,8 +557,8 @@
           </div>
         </div>
 
-        <!-- RESPONSE FORM (Microsoft Forms) -->
-        <div style="margin-top:26px;background:#F7F4EF;border-radius:10px;padding:8px;">
+        <!-- RESPONSE FORM (Microsoft Forms) — embedded where the browser allows it -->
+        <div id="formEmbed" style="margin-top:26px;background:#F7F4EF;border-radius:10px;padding:8px;">
           <iframe id="mosaicForm" title="MOSAIC validation — response form"
             src="https://forms.cloud.microsoft/e/wcgeFbHJCM?embed=true"
             width="100%" height="680"
@@ -566,8 +566,16 @@
             frameborder="0" marginwidth="0" marginheight="0"
             allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
         </div>
+
+        <!-- Fallback shown when the browser blocks embedded forms (Safari / iPhone / iPad) -->
+        <div id="formFallback" style="display:none;margin-top:26px;background:#F7F4EF;border-radius:10px;padding:34px 28px;text-align:center;">
+          <div style="font-family:Georgia,serif;font-size:20px;font-weight:700;color:#0D5C6B;margin-bottom:8px;">Record your response</div>
+          <p style="font-family:Carlito,Calibri,sans-serif;font-size:14px;line-height:1.62;color:#1C2B3A;margin:0 auto 20px;max-width:480px;">Safari and iPhone/iPad browsers block forms shown inside a page. Open the form in a new tab instead — it only takes a moment, and your answers go to exactly the same place.</p>
+          <a href="https://forms.cloud.microsoft/e/wcgeFbHJCM" target="_blank" rel="noopener" style="display:inline-block;font-family:Carlito,Calibri,sans-serif;font-size:15px;font-weight:700;color:#fff;background:#0D5C6B;border-radius:100px;padding:13px 30px;text-decoration:none;">Open the response form &rarr;</a>
+        </div>
+
         <p style="font-family:Carlito,Calibri,sans-serif;font-size:12.5px;line-height:1.5;color:rgba(214,238,242,0.7);margin:12px 0 0;text-align:center;">
-          Form not showing? <a href="https://forms.cloud.microsoft/e/wcgeFbHJCM" target="_blank" rel="noopener" style="color:#E8B776;font-weight:700;">Open the response form in a new window &rarr;</a>
+          Prefer a separate tab? <a href="https://forms.cloud.microsoft/e/wcgeFbHJCM" target="_blank" rel="noopener" style="color:#E8B776;font-weight:700;">Open the response form in a new window &rarr;</a>
         </p>
 
         <div style="margin-top:24px;padding:16px 20px;background:rgba(214,238,242,0.10);border:1px solid rgba(214,238,242,0.22);border-radius:8px;">
@@ -646,6 +654,21 @@
     toc.appendChild(row);
     tocRows[id] = row;
   });
+
+  // ---- Safari / iOS WebKit blocks embedded Microsoft Forms (ITP) ----
+  // In those browsers the iframe stays blank, so swap it for a clear button.
+  (function () {
+    var ua = navigator.userAgent || "";
+    var isAppleWebkit = /iP(hone|ad|od)/.test(ua) ||
+      (navigator.vendor && navigator.vendor.indexOf("Apple") > -1 &&
+       !/CriOS|FxiOS|EdgiOS|Chrome|Chromium/.test(ua));
+    if (isAppleWebkit) {
+      var emb = document.getElementById("formEmbed");
+      var fb = document.getElementById("formFallback");
+      if (emb) emb.style.display = "none";
+      if (fb) fb.style.display = "block";
+    }
+  })();
 
   // ---- Rail call-to-action: jump to the response form ----
   var railCta = document.getElementById("railCta");
