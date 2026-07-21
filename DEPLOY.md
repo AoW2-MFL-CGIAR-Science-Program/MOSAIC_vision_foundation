@@ -32,8 +32,8 @@ The live page refreshes within ~1 minute.
 **Option 2 — GitHub website:** open the repo → click `index.html` → pencil icon →
 paste the new content / upload → **Commit changes**.
 
-To change the cover status label, edit `var STATUS_LABEL = "For validation";` near the
-top of the `<script>` in `index.html` (e.g. to `"Final"`).
+To change the cover status label, edit `var STATUS_LABEL = "Revised after validation";`
+near the top of the `<script>` in `index.html` (e.g. to `"Final"`).
 
 ---
 
